@@ -1,4 +1,4 @@
-package com.myname.mymodid;
+package com.nfdobbs.emptyhorizons;
 
 public class ClientProxy extends CommonProxy {
 

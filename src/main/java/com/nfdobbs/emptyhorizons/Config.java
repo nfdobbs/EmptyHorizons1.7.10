@@ -1,4 +1,4 @@
-package com.myname.mymodid;
+package com.nfdobbs.emptyhorizons;
 
 import java.io.File;
 
