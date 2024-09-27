@@ -3,6 +3,8 @@ package com.nfdobbs.emptyhorizons;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.nfdobbs.emptyhorizons.commands.CommandEmptyHorizonsInitialize;
+
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -48,5 +50,6 @@ public class EmptyHorizons {
     // register server commands in this event handler (Remove if not needed)
     public void serverStarting(FMLServerStartingEvent event) {
         proxy.serverStarting(event);
+        event.registerServerCommand(new CommandEmptyHorizonsInitialize());
     }
 }
