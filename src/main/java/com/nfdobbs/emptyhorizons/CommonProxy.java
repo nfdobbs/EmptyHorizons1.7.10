@@ -1,11 +1,19 @@
 package com.nfdobbs.emptyhorizons;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import net.minecraft.nbt.NBTTagCompound;
+
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
 public class CommonProxy {
+
+    // This is used to store modded player data between respawns
+    public static final Map<String, NBTTagCompound> extendedEntityData = new HashMap<String, NBTTagCompound>();
 
     // preInit "Run before anything else. Read your config, create blocks, items, etc, and register them with the
     // GameRegistry." (Remove if not needed)
@@ -24,4 +32,12 @@ public class CommonProxy {
 
     // register server commands in this event handler (Remove if not needed)
     public void serverStarting(FMLServerStartingEvent event) {}
+
+    public static void storeEntityData(String name, NBTTagCompound compound) {
+        extendedEntityData.put(name, compound);
+    }
+
+    public static NBTTagCompound getEntityData(String name) {
+        return extendedEntityData.remove(name);
+    }
 }
