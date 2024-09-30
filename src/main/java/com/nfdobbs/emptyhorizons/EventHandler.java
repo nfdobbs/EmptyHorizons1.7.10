@@ -1,11 +1,10 @@
 package com.nfdobbs.emptyhorizons;
 
-import static com.nfdobbs.emptyhorizons.EmptyHorizons.proxy;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
 
@@ -27,16 +26,22 @@ public class EventHandler {
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinWorldEvent event) {
         if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayer) {
-            NBTTagCompound playerData = proxy.getEntityData(((EntityPlayer) event.entity).getCommandSenderName());
-
-            if (playerData != null) {
-                event.entity.getExtendedProperties(ExtendedEmptyHorizonsPlayer.EXT_PROP_NAME)
-                    .loadNBTData(playerData);
-                // event.entity.getExtendedProperties(ExtendedEmptyHorizonsPlayer.EXT_PROP_NAME).syncExtendedProperties(playerData);
-            }
+            ExtendedEmptyHorizonsPlayer.loadProxyData((EntityPlayer) event.entity);
         }
+    }
 
-        // Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("Welcome to the Server"));
+    @SubscribeEvent
+    public void onLivingDeath(LivingDeathEvent event) {
+        if (Helpers.IsServerSide(event) && Helpers.IsPlayerEvent(event)) {
+            NBTTagCompound modPlayerData = new NBTTagCompound();
+
+            ExtendedEmptyHorizonsPlayer modPlayer = (ExtendedEmptyHorizonsPlayer) event.entity
+                .getExtendedProperties(ExtendedEmptyHorizonsPlayer.EXT_PROP_NAME);
+            modPlayer.saveNBTData(modPlayerData);
+
+            // Call Save Proxy Data
+            ExtendedEmptyHorizonsPlayer.saveProxyData((EntityPlayer) event.entity);
+        }
     }
 
 }

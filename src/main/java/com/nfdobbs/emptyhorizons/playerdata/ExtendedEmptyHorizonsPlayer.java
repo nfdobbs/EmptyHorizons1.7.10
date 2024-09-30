@@ -6,6 +6,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
+import com.nfdobbs.emptyhorizons.CommonProxy;
+
 public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
 
     public final static String EXT_PROP_NAME = "ExtendedEmptyHorizonsPlayer";
@@ -54,6 +56,30 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
 
         System.out.println("Expedition time: " + currentExpeditionTime + " Max Expedition time: " + maxExpeditionTime);
         System.out.println("Challenge: " + doingChallenge);
+    }
+
+    private static String getSaveKey(EntityPlayer player) {
+        return player.getDisplayName() + ":" + EXT_PROP_NAME;
+    }
+
+    public static void saveProxyData(EntityPlayer player) {
+        ExtendedEmptyHorizonsPlayer playerData = ExtendedEmptyHorizonsPlayer.get(player);
+
+        NBTTagCompound savedData = new NBTTagCompound();
+        playerData.saveNBTData(savedData);
+
+        CommonProxy.storeEntityData(getSaveKey(player), savedData);
+    }
+
+    public static void loadProxyData(EntityPlayer player) {
+        ExtendedEmptyHorizonsPlayer playerData = ExtendedEmptyHorizonsPlayer.get(player);
+        NBTTagCompound savedData = CommonProxy.getEntityData(getSaveKey(player));
+
+        if (savedData != null) {
+            playerData.loadNBTData(savedData);
+        }
+
+        // playerData.syncProperties();
     }
 
     @Override
