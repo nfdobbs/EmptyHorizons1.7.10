@@ -15,6 +15,8 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
     public final static String CURRENT_EXPEDITION_TIME_KEY = "CurrentExpeditionTime";
     public final static String DOING_CHALLENGE_KEY = "DoingChallenge";
 
+    public final static int CURRENT_EXPEDITION_TIME_WATCHER = 24;
+
     private final EntityPlayer player;
 
     public int maxExpeditionTime = 60;
@@ -23,6 +25,9 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
 
     public ExtendedEmptyHorizonsPlayer(EntityPlayer player) {
         this.player = player;
+
+        this.player.getDataWatcher()
+            .addObject(CURRENT_EXPEDITION_TIME_WATCHER, maxExpeditionTime);
     }
 
     public static void register(EntityPlayer player) {
@@ -39,7 +44,11 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
 
         // Save Values
         properties.setInteger(MAX_EXPEDITION_TIME_KEY, maxExpeditionTime);
-        properties.setInteger(CURRENT_EXPEDITION_TIME_KEY, currentExpeditionTime);
+        // properties.setInteger(CURRENT_EXPEDITION_TIME_KEY, currentExpeditionTime);
+        properties.setInteger(
+            CURRENT_EXPEDITION_TIME_KEY,
+            this.player.getDataWatcher()
+                .getWatchableObjectInt(CURRENT_EXPEDITION_TIME_WATCHER));
         properties.setBoolean(DOING_CHALLENGE_KEY, doingChallenge);
 
         // Use unique tags to avoid conflicts
@@ -50,7 +59,10 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
     public void loadNBTData(NBTTagCompound compound) {
         NBTTagCompound properties = compound.getCompoundTag(EXT_PROP_NAME);
 
-        currentExpeditionTime = properties.getInteger(CURRENT_EXPEDITION_TIME_KEY);
+        // currentExpeditionTime = properties.getInteger(CURRENT_EXPEDITION_TIME_KEY);
+        this.player.getDataWatcher()
+            .updateObject(CURRENT_EXPEDITION_TIME_WATCHER, properties.getInteger(CURRENT_EXPEDITION_TIME_KEY));
+
         maxExpeditionTime = properties.getInteger(MAX_EXPEDITION_TIME_KEY);
         doingChallenge = properties.getBoolean(DOING_CHALLENGE_KEY);
 
@@ -78,8 +90,20 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
         if (savedData != null) {
             playerData.loadNBTData(savedData);
         }
+    }
 
-        // playerData.syncProperties();
+    public int getExpeditionTime() {
+        return this.player.getDataWatcher()
+            .getWatchableObjectInt(CURRENT_EXPEDITION_TIME_WATCHER);
+    }
+
+    public void setExpeditionTime(int expeditionTime) {
+        this.player.getDataWatcher()
+            .updateObject(CURRENT_EXPEDITION_TIME_WATCHER, expeditionTime);
+    }
+
+    public int getMaxExpeditionTime() {
+        return maxExpeditionTime;
     }
 
     @Override

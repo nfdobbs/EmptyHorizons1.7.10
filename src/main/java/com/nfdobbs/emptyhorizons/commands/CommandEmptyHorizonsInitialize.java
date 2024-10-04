@@ -34,10 +34,14 @@ public class CommandEmptyHorizonsInitialize implements ICommand {
         ExtendedEmptyHorizonsPlayer player = (ExtendedEmptyHorizonsPlayer) ((EntityPlayer) sender)
             .getExtendedProperties(ExtendedEmptyHorizonsPlayer.EXT_PROP_NAME);
 
-        player.maxExpeditionTime = player.maxExpeditionTime + 1;
+        int expeditionTime = player.getExpeditionTime();
+
+        expeditionTime = expeditionTime + 1;
+
+        player.setExpeditionTime(expeditionTime);
 
         if (!world.isRemote) {
-            sender.addChatMessage(new ChatComponentText("Hello " + player.maxExpeditionTime + "!"));
+            sender.addChatMessage(new ChatComponentText("Hello " + player.getExpeditionTime() + "!"));
             return;
         }
     }

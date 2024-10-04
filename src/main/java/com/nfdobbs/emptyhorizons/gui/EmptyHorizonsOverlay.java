@@ -4,6 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
+import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
+
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
@@ -22,8 +24,12 @@ public class EmptyHorizonsOverlay extends Gui {
         if (event.isCanceled() || event.type != RenderGameOverlayEvent.ElementType.EXPERIENCE) {
             return;
         }
-        Gui.drawRect(10, 20, 30, 40, 0xFF0000FF);
-        drawCenteredString(mc.fontRenderer, text, 100, 100, 0xFFFFFF);
+
+        ExtendedEmptyHorizonsPlayer player = ExtendedEmptyHorizonsPlayer.get(this.mc.thePlayer);
+
+        int expeditionTime = player.getExpeditionTime();
+
+        drawString(mc.fontRenderer, String.valueOf(expeditionTime), 0, 0, 0xFFFFFF);
     }
 
     /*
