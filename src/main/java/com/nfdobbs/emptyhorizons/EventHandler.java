@@ -43,5 +43,4 @@ public class EventHandler {
             ExtendedEmptyHorizonsPlayer.saveProxyData((EntityPlayer) event.entity);
         }
     }
-
 }

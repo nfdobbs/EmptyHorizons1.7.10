@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.nfdobbs.emptyhorizons.commands.CommandEmptyHorizonsInitialize;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -42,6 +43,9 @@ public class EmptyHorizons {
         proxy.init(event);
 
         MinecraftForge.EVENT_BUS.register(new EventHandler());
+        FMLCommonHandler.instance()
+            .bus()
+            .register(new FMLEventHandler());
     }
 
     @Mod.EventHandler
