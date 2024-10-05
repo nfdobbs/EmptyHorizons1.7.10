@@ -5,6 +5,8 @@ import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.nfdobbs.emptyhorizons.EventHandlers.EventHandler;
+import com.nfdobbs.emptyhorizons.EventHandlers.FMLEventHandler;
 import com.nfdobbs.emptyhorizons.commands.CommandEmptyHorizonsInitialize;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -35,6 +37,7 @@ public class EmptyHorizons {
     // GameRegistry." (Remove if not needed)
     public void preInit(FMLPreInitializationEvent event) {
         proxy.preInit(event);
+
     }
 
     @Mod.EventHandler

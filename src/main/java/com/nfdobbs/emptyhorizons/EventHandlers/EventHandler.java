@@ -1,4 +1,4 @@
-package com.nfdobbs.emptyhorizons;
+package com.nfdobbs.emptyhorizons.EventHandlers;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -6,6 +6,8 @@ import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
+import com.nfdobbs.emptyhorizons.EmptyHorizons;
+import com.nfdobbs.emptyhorizons.Helpers;
 import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;

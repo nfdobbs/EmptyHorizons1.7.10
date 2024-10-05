@@ -40,6 +40,8 @@ public class CommandEmptyHorizonsInitialize implements ICommand {
 
         player.setExpeditionTime(expeditionTime);
 
+        player.debugMessage();
+
         if (!world.isRemote) {
             sender.addChatMessage(new ChatComponentText("Hello " + player.getExpeditionTime() + "!"));
             return;

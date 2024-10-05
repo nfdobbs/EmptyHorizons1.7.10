@@ -2,11 +2,14 @@ package com.nfdobbs.emptyhorizons.playerdata;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
 import com.nfdobbs.emptyhorizons.CommonProxy;
+import com.nfdobbs.emptyhorizons.EmptyHorizons;
+import com.nfdobbs.emptyhorizons.network.SyncMessage;
 
 public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
 
@@ -15,12 +18,10 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
     public final static String CURRENT_EXPEDITION_TIME_KEY = "CurrentExpeditionTime";
     public final static String DOING_CHALLENGE_KEY = "DoingChallenge";
 
-    public final static int CURRENT_EXPEDITION_TIME_WATCHER = 24;
-
     private final EntityPlayer player;
 
-    public int maxExpeditionTime = 60;
-    private int currentExpeditionTime = 60;
+    public final static int CURRENT_EXPEDITION_TIME_WATCHER = 24;
+    private int maxExpeditionTime = 60;
     private boolean doingChallenge = false;
 
     public ExtendedEmptyHorizonsPlayer(EntityPlayer player) {
@@ -44,11 +45,12 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
 
         // Save Values
         properties.setInteger(MAX_EXPEDITION_TIME_KEY, maxExpeditionTime);
-        // properties.setInteger(CURRENT_EXPEDITION_TIME_KEY, currentExpeditionTime);
+
         properties.setInteger(
             CURRENT_EXPEDITION_TIME_KEY,
             this.player.getDataWatcher()
                 .getWatchableObjectInt(CURRENT_EXPEDITION_TIME_WATCHER));
+
         properties.setBoolean(DOING_CHALLENGE_KEY, doingChallenge);
 
         // Use unique tags to avoid conflicts
@@ -59,15 +61,10 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
     public void loadNBTData(NBTTagCompound compound) {
         NBTTagCompound properties = compound.getCompoundTag(EXT_PROP_NAME);
 
-        // currentExpeditionTime = properties.getInteger(CURRENT_EXPEDITION_TIME_KEY);
-        this.player.getDataWatcher()
-            .updateObject(CURRENT_EXPEDITION_TIME_WATCHER, properties.getInteger(CURRENT_EXPEDITION_TIME_KEY));
+        setExpeditionTime(properties.getInteger(CURRENT_EXPEDITION_TIME_KEY));
+        setMaxExpeditionTime(properties.getInteger(MAX_EXPEDITION_TIME_KEY));
 
-        maxExpeditionTime = properties.getInteger(MAX_EXPEDITION_TIME_KEY);
         doingChallenge = properties.getBoolean(DOING_CHALLENGE_KEY);
-
-        System.out.println("Expedition time: " + currentExpeditionTime + " Max Expedition time: " + maxExpeditionTime);
-        System.out.println("Challenge: " + doingChallenge);
     }
 
     private static String getSaveKey(EntityPlayer player) {
@@ -85,10 +82,14 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
 
     public static void loadProxyData(EntityPlayer player) {
         ExtendedEmptyHorizonsPlayer playerData = ExtendedEmptyHorizonsPlayer.get(player);
+
         NBTTagCompound savedData = CommonProxy.getEntityData(getSaveKey(player));
 
         if (savedData != null) {
             playerData.loadNBTData(savedData);
+        }
+        else {
+            playerData.sync();
         }
     }
 
@@ -104,6 +105,27 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
 
     public int getMaxExpeditionTime() {
         return maxExpeditionTime;
+    }
+
+    public void setMaxExpeditionTime(int maxExpeditionTime) {
+        this.maxExpeditionTime = maxExpeditionTime;
+        sync();
+    }
+
+    public void debugMessage() {
+        int expeditionTime = getExpeditionTime();
+
+        System.out.println("Expedition time: " + expeditionTime + " Max Expedition time: " + maxExpeditionTime);
+        System.out.println("Challenge: " + doingChallenge);
+    }
+
+    public void sync() {
+        if (!player.worldObj.isRemote) {
+            int expeditionTime = getExpeditionTime();
+
+            CommonProxy.networkWrapper
+                .sendTo(new SyncMessage(maxExpeditionTime, expeditionTime), (EntityPlayerMP) player);
+        }
     }
 
     @Override

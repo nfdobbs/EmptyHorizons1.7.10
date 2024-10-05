@@ -28,15 +28,9 @@ public class EmptyHorizonsOverlay extends Gui {
         ExtendedEmptyHorizonsPlayer player = ExtendedEmptyHorizonsPlayer.get(this.mc.thePlayer);
 
         int expeditionTime = player.getExpeditionTime();
+        int maxExpeditionTime = player.getMaxExpeditionTime();
 
-        drawString(mc.fontRenderer, String.valueOf(expeditionTime), 0, 0, 0xFFFFFF);
+        drawString(mc.fontRenderer, "Expedition Time: " + String.valueOf(expeditionTime), 2, 2, 0xFFFFFF);
+        drawString(mc.fontRenderer, "Max Expedition Time: " + String.valueOf(maxExpeditionTime), 2, 15, 0xFFFFFF);
     }
-
-    /*
-     * public EmptyHorizonsOverlay(Minecraft mc) {
-     * ScaledResolution scaled = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
-     * int width = scaled.getScaledWidth();
-     * int height = scaled.getScaledHeight();
-     * }
-     */
 }

@@ -5,20 +5,30 @@ import java.util.Map;
 
 import net.minecraft.nbt.NBTTagCompound;
 
+import com.nfdobbs.emptyhorizons.network.SyncMessage;
+import com.nfdobbs.emptyhorizons.network.SyncMessageHandler;
+
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.relauncher.Side;
 
 public class CommonProxy {
 
     // This is used to store modded player data between respawns
     public static final Map<String, NBTTagCompound> extendedEntityData = new HashMap<String, NBTTagCompound>();
+    public static SimpleNetworkWrapper networkWrapper;
 
     // preInit "Run before anything else. Read your config, create blocks, items, etc, and register them with the
     // GameRegistry." (Remove if not needed)
     public void preInit(FMLPreInitializationEvent event) {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
+
+        networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(EmptyHorizons.MODID);
+        networkWrapper.registerMessage(SyncMessageHandler.class, SyncMessage.class, 0, Side.CLIENT);
 
         EmptyHorizons.LOG.info(Config.greeting);
         EmptyHorizons.LOG.info("I am Empty Horizons at version " + Tags.VERSION);
