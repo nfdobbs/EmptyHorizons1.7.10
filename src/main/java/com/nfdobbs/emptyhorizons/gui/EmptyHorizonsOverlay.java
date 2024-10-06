@@ -30,7 +30,32 @@ public class EmptyHorizonsOverlay extends Gui {
         int expeditionTime = player.getExpeditionTime();
         int maxExpeditionTime = player.getMaxExpeditionTime();
 
-        drawString(mc.fontRenderer, "Expedition Time: " + String.valueOf(expeditionTime), 2, 2, 0xFFFFFF);
-        drawString(mc.fontRenderer, "Max Expedition Time: " + String.valueOf(maxExpeditionTime), 2, 15, 0xFFFFFF);
+        String expeditionTimeString = "Expedition Time: " + CreateTimeString(expeditionTime);
+        String maxExpeditionTimeString = "Max Expedition Time: " + CreateTimeString(maxExpeditionTime);
+
+        drawString(mc.fontRenderer, expeditionTimeString, 2, 2, 0xFFFFFF);
+
+        drawString(mc.fontRenderer, "Expedition Time: " + expeditionTime, 2, 40, 0xFFFFFF);
+
+        drawString(mc.fontRenderer, maxExpeditionTimeString, 2, 15, 0xFFFFFF);
+    }
+
+    private String CreateTimeString(int timeInSeconds) {
+        int minutes = timeInSeconds / 60;
+        int seconds = timeInSeconds % 60;
+
+        int hours = minutes / 60;
+        minutes = minutes % 60;
+
+        String outputTime = "";
+        if (hours > 0) {
+            outputTime = String.format("%d:%02d:%02d", hours, minutes, seconds);
+        } else if (minutes > 0) {
+            outputTime = String.format("%d:%02d", minutes, seconds);
+        } else {
+            outputTime = String.format("%d", seconds);
+        }
+
+        return outputTime;
     }
 }

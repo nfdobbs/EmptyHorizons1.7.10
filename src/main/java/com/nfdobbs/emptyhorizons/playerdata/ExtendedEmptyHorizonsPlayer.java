@@ -8,7 +8,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
 import com.nfdobbs.emptyhorizons.CommonProxy;
-import com.nfdobbs.emptyhorizons.EmptyHorizons;
 import com.nfdobbs.emptyhorizons.network.SyncMessage;
 
 public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
@@ -87,8 +86,7 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
 
         if (savedData != null) {
             playerData.loadNBTData(savedData);
-        }
-        else {
+        } else {
             playerData.sync();
         }
     }
