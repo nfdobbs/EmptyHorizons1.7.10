@@ -46,6 +46,7 @@ public class FMLEventHandler {
                     ehPlayer.setExpeditionTime(currentExpTime + 1);
                 }
 
+                //Tick seems to re-fire before player respawns resulting in repeat deaths this prevents that
                 if (currentExpTime < 0) {
                     ehPlayer.setExpeditionTime(1);
                     currentExpTime = 1;
