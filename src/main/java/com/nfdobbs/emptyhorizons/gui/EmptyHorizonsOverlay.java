@@ -2,6 +2,7 @@ package com.nfdobbs.emptyhorizons.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
@@ -30,14 +31,26 @@ public class EmptyHorizonsOverlay extends Gui {
         int expeditionTime = player.getExpeditionTime();
         int maxExpeditionTime = player.getMaxExpeditionTime();
 
-        String expeditionTimeString = "Expedition Time: " + CreateTimeString(expeditionTime);
+        if (expeditionTime < 0) {
+            expeditionTime = 1;
+        }
+
+        String expeditionTimeString = CreateTimeString(expeditionTime);
         String maxExpeditionTimeString = "Max Expedition Time: " + CreateTimeString(maxExpeditionTime);
 
-        drawString(mc.fontRenderer, expeditionTimeString, 2, 2, 0xFFFFFF);
+        EnumChatFormatting color = EnumChatFormatting.WHITE;
 
-        drawString(mc.fontRenderer, "Expedition Time: " + expeditionTime, 2, 40, 0xFFFFFF);
+        if (expeditionTime < 300 && expeditionTime > 60) {
+            color = EnumChatFormatting.YELLOW;
+        } else if (expeditionTime < 60) {
+            color = EnumChatFormatting.RED;
+        }
 
-        drawString(mc.fontRenderer, maxExpeditionTimeString, 2, 15, 0xFFFFFF);
+        expeditionTimeString = color + expeditionTimeString;
+
+        drawString(mc.fontRenderer, "Lethal Exposure: " + expeditionTimeString, 2, 2, 0xFFFFFF);
+
+        drawString(mc.fontRenderer, maxExpeditionTimeString, 2, 15, 0xFF5555);
     }
 
     private String CreateTimeString(int timeInSeconds) {

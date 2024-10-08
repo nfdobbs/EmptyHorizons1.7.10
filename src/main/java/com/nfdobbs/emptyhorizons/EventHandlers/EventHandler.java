@@ -43,6 +43,11 @@ public class EventHandler {
 
             // Call Save Proxy Data
             ExtendedEmptyHorizonsPlayer.saveProxyData((EntityPlayer) event.entity);
+
+            if (modPlayer.getExpeditionTime() < 1) {
+                modPlayer.setExpeditionTime(1);
+            }
+
         }
     }
 }
