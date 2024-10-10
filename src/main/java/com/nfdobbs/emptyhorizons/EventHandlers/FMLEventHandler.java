@@ -3,7 +3,6 @@ package com.nfdobbs.emptyhorizons.EventHandlers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 
-import com.nfdobbs.emptyhorizons.EmptyHorizons;
 import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -38,15 +37,13 @@ public class FMLEventHandler {
                 int maxExpTime = ehPlayer.getMaxExpeditionTime();
                 int currentExpTime = ehPlayer.getExpeditionTime();
 
-                EmptyHorizons.LOG.info("Expedition Time: " + currentExpTime);
-
                 if (player.dimension != SAFE_DIMENSION) {
                     ehPlayer.setExpeditionTime(currentExpTime - 1);
                 } else if (maxExpTime > currentExpTime) {
                     ehPlayer.setExpeditionTime(currentExpTime + 1);
                 }
 
-                //Tick seems to re-fire before player respawns resulting in repeat deaths this prevents that
+                // Tick seems to re-fire before player respawns resulting in repeat deaths this prevents that
                 if (currentExpTime < 0) {
                     ehPlayer.setExpeditionTime(1);
                     currentExpTime = 1;
