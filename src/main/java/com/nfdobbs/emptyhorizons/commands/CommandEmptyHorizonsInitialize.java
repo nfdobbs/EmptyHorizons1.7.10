@@ -9,6 +9,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 
 import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
+import com.nfdobbs.emptyhorizons.worlddata.FogProvider;
 
 public class CommandEmptyHorizonsInitialize implements ICommand {
 
@@ -43,7 +44,9 @@ public class CommandEmptyHorizonsInitialize implements ICommand {
         player.debugMessage();
 
         if (!world.isRemote) {
-            sender.addChatMessage(new ChatComponentText("Hello " + player.getExpeditionTime() + "!"));
+            FogProvider test = new FogProvider();
+            test.GetFogRecord(world, 1);
+            sender.addChatMessage(new ChatComponentText("Not Implemented!"));
             return;
         }
     }
