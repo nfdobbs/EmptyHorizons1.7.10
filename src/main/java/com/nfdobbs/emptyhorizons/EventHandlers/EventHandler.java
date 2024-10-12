@@ -1,6 +1,7 @@
 package com.nfdobbs.emptyhorizons.EventHandlers;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -9,6 +10,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import com.nfdobbs.emptyhorizons.EmptyHorizons;
 import com.nfdobbs.emptyhorizons.Helpers;
 import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
+import com.nfdobbs.emptyhorizons.worlddata.FogProvider;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
@@ -28,7 +30,18 @@ public class EventHandler {
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinWorldEvent event) {
         if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayer) {
+            // Setup persistent player data
             ExtendedEmptyHorizonsPlayer.loadProxyData((EntityPlayer) event.entity);
+
+            FogProvider serverFogProvider = new FogProvider();
+            serverFogProvider.GetFogRecord(event.entity.worldObj, event.entity.dimension);
+
+            serverFogProvider.SyncFogData((EntityPlayerMP) event.entity);
+            EmptyHorizons.LOG.info("Syncing Fog Data");
+
+            // ClientProxy.fogProvider.GetFogRecord(event.entity.worldObj, event.entity.dimension);
+            // We need to send fog Data
+            // ClientProxy.fogProvider.SyncFogData((EntityPlayerMP) event.entity);
         }
     }
 

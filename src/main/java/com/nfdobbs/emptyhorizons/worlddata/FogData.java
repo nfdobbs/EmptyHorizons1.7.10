@@ -28,16 +28,15 @@ public class FogData extends WorldSavedData {
         return data;
     }
 
-    public void AddDimensionFogData(NBTTagCompound compound, int dimension, float fogDensity, float fogColorR,
-        float fogColorG, float fogColorB) {
+    public void AddDimensionFogData(int dimension, float fogDensity, float fogColorR, float fogColorG,
+        float fogColorB) {
 
-        // NBTTagCompound compound = new NBTTagCompound();
+        NBTTagCompound compound = new NBTTagCompound();
         compound.setFloat("FogDensity", fogDensity);
         compound.setFloat("FogColorR", fogColorR);
         compound.setFloat("FogColorG", fogColorG);
         compound.setFloat("FogColorB", fogColorB);
         this.data.setTag(GetFogKey(dimension), compound);
-        // this.setDirty(true);
     }
 
     public FogRecord GetDimensionFogData(int dimension) {
@@ -56,5 +55,13 @@ public class FogData extends WorldSavedData {
 
     private String GetFogKey(int dimension) {
         return "" + dimension;
+    }
+
+    public void SetFogDataNBT(NBTTagCompound compound) {
+        data = compound;
+    }
+
+    public Boolean DimHasFogKey(int dimensionID) {
+        return data.hasKey(GetFogKey(dimensionID));
     }
 }

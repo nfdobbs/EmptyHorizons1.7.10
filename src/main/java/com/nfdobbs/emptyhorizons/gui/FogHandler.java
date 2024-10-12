@@ -15,13 +15,15 @@ public class FogHandler {
 
     @SubscribeEvent
     public void onFog(EntityViewRenderEvent.FogDensity event) {
-
-        // .05F best case scenario
+        // .3044337
         FogRecord fogRecord = fogProvider
             .GetFogRecord(event.entity.worldObj, event.entity.worldObj.provider.dimensionId);
 
         if (fogRecord != null) {
             event.density = fogRecord.getFogDensity();
+            event.setCanceled(true);
+        } else {
+            event.density = 1F;
             event.setCanceled(true);
         }
     }
@@ -35,14 +37,20 @@ public class FogHandler {
         FogRecord fogRecord = fogProvider
             .GetFogRecord(event.entity.worldObj, event.entity.worldObj.provider.dimensionId);
 
-       /* event.red = .2156F;
-        event.green = .7215F;
-        event.blue = .0431F; */
+        /*
+         * event.red = .21159399F;
+         * event.green = .9669117F;
+         * event.blue =
+         */
 
         if (fogRecord != null) {
             event.red = fogRecord.getFogColorR();
             event.green = fogRecord.getFogColorG();
             event.blue = fogRecord.getFogColorB();
+        } else {
+            event.red = .99F;
+            event.green = .99F;
+            event.blue = .99F;
         }
     }
 

@@ -2,8 +2,11 @@ package com.nfdobbs.emptyhorizons.worlddata;
 
 import java.util.Random;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
+
+import com.nfdobbs.emptyhorizons.CommonProxy;
+import com.nfdobbs.emptyhorizons.network.FogDataMessage;
 
 public class FogProvider {
 
@@ -20,40 +23,71 @@ public class FogProvider {
 
         FogRecord fogRecord = fogData.GetDimensionFogData(dimensionID);
 
-        if (fogRecord == null) {
-            CreateFogForDimension(dimensionID);
-            return fogData.GetDimensionFogData(dimensionID);
+        if (fogRecord != null) {
+            return fogRecord;
         }
 
-        return fogRecord;
+        if (!world.isRemote) {
+            CreateFogForDimension(dimensionID);
+            return fogData.GetDimensionFogData(dimensionID);
+        } else {
+            return null;
+        }
     }
 
     private void CreateFogForDimension(int dimensionID) {
 
-        long worldSeed = world.getSeed();
-        Random rd = new Random(worldSeed + dimensionID);
+        float fogDensity;
+        float fogColorR;
+        float fogColorG;
+        float fogColorB;
 
-        float fogDensity = MIN_FOG_DENSITY + rd.nextFloat() * (MAX_FOG_DENSITY - MIN_FOG_DENSITY);
-        float fogColorR = rd.nextFloat();
-        float fogColorG = rd.nextFloat();
-        float fogColorB = rd.nextFloat();
+        if (dimensionID == 0) {
+            fogDensity = .3044337F;
+            fogColorR = .21159399F;
+            fogColorG = .9669117F;
+            fogColorB = .7094888F;
+        } else {
+            long worldSeed = world.getSeed();
+            Random rd = new Random(worldSeed + dimensionID);
 
-        NBTTagCompound compound = new NBTTagCompound();
+            fogDensity = MIN_FOG_DENSITY + rd.nextFloat() * (MAX_FOG_DENSITY - MIN_FOG_DENSITY);
+            fogColorR = rd.nextFloat();
+            fogColorG = rd.nextFloat();
+            fogColorB = rd.nextFloat();
+        }
 
-        fogData.AddDimensionFogData(compound, dimensionID, fogDensity, fogColorR, fogColorG, fogColorB);
+        fogData.AddDimensionFogData(dimensionID, fogDensity, fogColorR, fogColorG, fogColorB);
         fogData.setDirty(true);
     }
 
-    private void LoadOrSetupFogProvider(World world) {
-        this.world = world;
+    private void LoadOrSetupFogProvider(World currentWorld) {
+        world = currentWorld;
 
         if (fogData == null) {
-            fogData = (FogData) world.mapStorage.loadData(FogData.class, "EmptyHorizonsFogData");
+            fogData = (FogData) currentWorld.mapStorage.loadData(FogData.class, "EmptyHorizonsFogData");
 
             if (fogData == null) {
                 fogData = new FogData("EmptyHorizonsFogData");
                 world.mapStorage.setData("EmptyHorizonsFogData", fogData);
             }
         }
+    }
+
+    public void SyncFogData(EntityPlayerMP player) {
+        if (!player.worldObj.isRemote) {
+            LoadOrSetupFogProvider(player.worldObj);
+            CommonProxy.networkWrapper.sendTo(new FogDataMessage(fogData), player);
+        }
+    }
+
+    public void SetFogData(FogData newFogData) {
+        fogData = newFogData;
+    }
+
+    public Boolean DimHasFogData(World world, int dimensionID) {
+        LoadOrSetupFogProvider(world);
+
+        return fogData.DimHasFogKey(dimensionID);
     }
 }

@@ -13,16 +13,6 @@ public class FMLEventHandler {
     private int tickCounter = 0;
     private static final int SAFE_DIMENSION = 0;
 
-    /*
-     * @SubscribeEvent
-     * public void OnPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
-     * ExtendedEmptyHorizonsPlayer player = ExtendedEmptyHorizonsPlayer.get(event.player);
-     * int maxExpeditionTime = player.getMaxExpeditionTime();
-     * player.setMaxExpeditionTime(maxExpeditionTime + 100);
-     * player.debugMessage();
-     * }
-     */
-
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         EntityPlayer player = event.player;
