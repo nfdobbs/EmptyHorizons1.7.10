@@ -3,6 +3,7 @@ package com.nfdobbs.emptyhorizons.EventHandlers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 
+import com.nfdobbs.emptyhorizons.EmptyHorizons;
 import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -11,7 +12,6 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 public class FMLEventHandler {
 
     private int tickCounter = 0;
-    private static final int SAFE_DIMENSION = 0;
 
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
@@ -27,7 +27,7 @@ public class FMLEventHandler {
                 int maxExpTime = ehPlayer.getMaxExpeditionTime();
                 int currentExpTime = ehPlayer.getExpeditionTime();
 
-                if (player.dimension != SAFE_DIMENSION) {
+                if (player.dimension != EmptyHorizons.SAFE_DIMENSION) {
                     ehPlayer.setExpeditionTime(currentExpTime - 1);
                 } else if (maxExpTime > currentExpTime) {
                     ehPlayer.setExpeditionTime(currentExpTime + 1);

@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 
+import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimTeleporter;
 import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
 
 public class CommandEmptyHorizonsInitialize implements ICommand {
@@ -45,7 +46,8 @@ public class CommandEmptyHorizonsInitialize implements ICommand {
         if (!world.isRemote) {
             // send worlds fog data
 
-            sender.addChatMessage(new ChatComponentText("Not Implemented!"));
+            sender.addChatMessage(new ChatComponentText("Teleporting"));
+            EmptyDimTeleporter.teleportToEmptyDim((EntityPlayer) sender, 0, 100, 0, 0, 0);
             return;
         }
     }

@@ -47,7 +47,8 @@ public class FogProvider {
             fogColorR = .21159399F;
             fogColorG = .9669117F;
             fogColorB = .7094888F;
-        } else {
+        }
+        else {
             long worldSeed = world.getSeed();
             Random rd = new Random(worldSeed + dimensionID);
 

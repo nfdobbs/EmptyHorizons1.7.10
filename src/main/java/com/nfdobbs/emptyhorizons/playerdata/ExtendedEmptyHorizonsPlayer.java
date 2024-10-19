@@ -20,7 +20,7 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
     private final EntityPlayer player;
 
     public final static int CURRENT_EXPEDITION_TIME_WATCHER = 24;
-    private int maxExpeditionTime = 60;
+    private int maxExpeditionTime = 600;
     private boolean doingChallenge = false;
 
     public ExtendedEmptyHorizonsPlayer(EntityPlayer player) {

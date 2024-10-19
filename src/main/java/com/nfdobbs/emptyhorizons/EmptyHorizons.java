@@ -5,6 +5,7 @@ import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimRegister;
 import com.nfdobbs.emptyhorizons.EventHandlers.EventHandler;
 import com.nfdobbs.emptyhorizons.EventHandlers.FMLEventHandler;
 import com.nfdobbs.emptyhorizons.commands.CommandEmptyHorizonsInitialize;
@@ -27,6 +28,8 @@ public class EmptyHorizons {
     public static final String MODID = "emptyhorizons";
     public static final Logger LOG = LogManager.getLogger(MODID);
 
+    public static final int SAFE_DIMENSION = -404;
+
     @SidedProxy(
         clientSide = "com.nfdobbs.emptyhorizons.ClientProxy",
         serverSide = "com.nfdobbs.emptyhorizons.CommonProxy")
@@ -37,7 +40,7 @@ public class EmptyHorizons {
     // GameRegistry." (Remove if not needed)
     public void preInit(FMLPreInitializationEvent event) {
         proxy.preInit(event);
-
+        EmptyDimRegister.registerDimensions();
     }
 
     @Mod.EventHandler
