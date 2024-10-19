@@ -1,12 +1,9 @@
 package com.nfdobbs.emptyhorizons.gui;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GLContext;
 
 import com.nfdobbs.emptyhorizons.ClientProxy;
 import com.nfdobbs.emptyhorizons.EmptyHorizons;
@@ -29,9 +26,9 @@ public class FogHandler {
         FogRecord fogRecord = fogProvider
             .GetFogRecord(event.entity.worldObj, event.entity.worldObj.provider.dimensionId);
 
-        //For some reason when we cancel the event we never get back into GL11.GL_EXP mode
-        //This seems to be the default mode until the event is not canceled a single time
-        //then the mode gets stuck in GL11.GL_LINEAR
+        // For some reason when we cancel the event we never get back into GL11.GL_EXP mode
+        // This seems to be the default mode until the event is not canceled a single time
+        // then the mode gets stuck in GL11.GL_LINEAR
         GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_EXP);
 
         if (fogRecord != null) {
