@@ -1,5 +1,7 @@
 package com.nfdobbs.emptyhorizons.playerdata;
 
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -8,7 +10,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
 import com.nfdobbs.emptyhorizons.CommonProxy;
+import com.nfdobbs.emptyhorizons.Config;
 import com.nfdobbs.emptyhorizons.network.SyncMessage;
+
+import betterquesting.api.properties.NativeProps;
+import betterquesting.questing.QuestInstance;
 
 public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
 
@@ -20,7 +26,9 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
     private final EntityPlayer player;
 
     public final static int CURRENT_EXPEDITION_TIME_WATCHER = 24;
-    private int maxExpeditionTime = 600;
+    private int maxExpeditionTime = Config.startingExposureTime;
+    private int mainQuestRewardTime = 10;
+    private int optionalQuestRewardTime = 3;
     private boolean doingChallenge = false;
 
     public ExtendedEmptyHorizonsPlayer(EntityPlayer player) {
@@ -108,6 +116,41 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
     public void setMaxExpeditionTime(int maxExpeditionTime) {
         this.maxExpeditionTime = maxExpeditionTime;
         sync();
+    }
+
+    public void giveQuestReward(QuestInstance quest, List<String> questLineNames) {
+        int rewardTime = 0;
+
+        int questBaseTime = 0;
+
+        if (quest.getProperty(NativeProps.MAIN)) {
+            questBaseTime = mainQuestRewardTime;
+        } else {
+            questBaseTime = optionalQuestRewardTime;
+        }
+
+        float questMultiplier = getQuestMultiplier(questLineNames);
+        rewardTime = Math.round(questBaseTime * questMultiplier);
+
+        setMaxExpeditionTime(maxExpeditionTime + rewardTime);
+    }
+
+    private float getQuestMultiplier(List<String> questLineNames) {
+        float questMultiplier = 1.0f;
+
+        for (String questLineName : questLineNames) {
+            float multiplier = 0.0f;
+
+            if (Config.questLineMultipliers.containsKey(questLineName)) {
+                multiplier = Config.questLineMultipliers.get(questLineName);
+
+                if (multiplier > questMultiplier) {
+                    questMultiplier = multiplier;
+                }
+            }
+        }
+
+        return questMultiplier;
     }
 
     public void debugMessage() {

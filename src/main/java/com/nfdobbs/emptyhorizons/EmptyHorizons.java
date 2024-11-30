@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimRegister;
+import com.nfdobbs.emptyhorizons.EventHandlers.BetterQuestingEventHandler;
 import com.nfdobbs.emptyhorizons.EventHandlers.EventHandler;
 import com.nfdobbs.emptyhorizons.EventHandlers.FMLEventHandler;
 import com.nfdobbs.emptyhorizons.commands.CommandEmptyHorizonsInitialize;
@@ -49,6 +50,10 @@ public class EmptyHorizons {
         proxy.init(event);
 
         MinecraftForge.EVENT_BUS.register(new EventHandler());
+
+        MinecraftForge.EVENT_BUS.register(new BetterQuestingEventHandler());
+        MinecraftForge.TERRAIN_GEN_BUS.register(new BetterQuestingEventHandler());
+
         FMLCommonHandler.instance()
             .bus()
             .register(new FMLEventHandler());
