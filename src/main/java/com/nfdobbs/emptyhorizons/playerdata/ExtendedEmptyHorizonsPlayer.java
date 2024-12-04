@@ -69,7 +69,8 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
         NBTTagCompound properties = compound.getCompoundTag(EXT_PROP_NAME);
 
         setExpeditionTime(properties.getInteger(CURRENT_EXPEDITION_TIME_KEY));
-        setMaxExpeditionTime(properties.getInteger(MAX_EXPEDITION_TIME_KEY));
+
+        maxExpeditionTime = properties.getInteger(MAX_EXPEDITION_TIME_KEY);
 
         doingChallenge = properties.getBoolean(DOING_CHALLENGE_KEY);
     }

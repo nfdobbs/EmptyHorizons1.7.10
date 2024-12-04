@@ -12,8 +12,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class EmptyHorizonsOverlay extends Gui {
 
-    String text = "Does this work?";
-    private Minecraft mc;
+    private final Minecraft mc;
 
     public EmptyHorizonsOverlay(Minecraft mc) {
         super();

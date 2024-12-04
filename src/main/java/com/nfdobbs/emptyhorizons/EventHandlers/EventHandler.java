@@ -40,6 +40,7 @@ public class EventHandler {
             EmptyHorizons.LOG.info("Syncing Fog Data");
 
             // ClientProxy.fogProvider.GetFogRecord(event.entity.worldObj, event.entity.dimension);
+
             // We need to send fog Data
             // ClientProxy.fogProvider.SyncFogData((EntityPlayerMP) event.entity);
         }

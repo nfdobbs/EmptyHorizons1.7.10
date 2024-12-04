@@ -1,6 +1,10 @@
 package com.nfdobbs.emptyhorizons.EventHandlers;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -12,7 +16,11 @@ import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
 import betterquesting.api.events.QuestEvent;
 import betterquesting.api.properties.NativeProps;
 import betterquesting.api.questing.IQuestLine;
-import betterquesting.questing.*;
+import betterquesting.questing.QuestDatabase;
+import betterquesting.questing.QuestInstance;
+import betterquesting.questing.QuestLine;
+import betterquesting.questing.QuestLineDatabase;
+import betterquesting.questing.QuestLineEntry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class BetterQuestingEventHandler {
@@ -23,9 +31,7 @@ public class BetterQuestingEventHandler {
 
     @SubscribeEvent
     public void OnQuestCompletion(QuestEvent event) {
-        if (server == null) {
-            server = MinecraftServer.getServer();
-        }
+        server = MinecraftServer.getServer();
 
         // Do nothing on client side
         if (server.getEntityWorld().isRemote) {

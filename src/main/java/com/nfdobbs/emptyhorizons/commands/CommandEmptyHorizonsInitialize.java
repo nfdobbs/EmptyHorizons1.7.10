@@ -9,7 +9,6 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 
 import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimTeleporter;
-import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
 
 public class CommandEmptyHorizonsInitialize implements ICommand {
 
@@ -32,24 +31,21 @@ public class CommandEmptyHorizonsInitialize implements ICommand {
     public void processCommand(ICommandSender sender, String[] args) {
         World world = sender.getEntityWorld();
 
-        ExtendedEmptyHorizonsPlayer player = (ExtendedEmptyHorizonsPlayer) ((EntityPlayer) sender)
-            .getExtendedProperties(ExtendedEmptyHorizonsPlayer.EXT_PROP_NAME);
-
-        int expeditionTime = player.getExpeditionTime();
-
-        expeditionTime = expeditionTime + 1;
-
-        player.setExpeditionTime(expeditionTime);
-
-        player.debugMessage();
+        /*
+         * ExtendedEmptyHorizonsPlayer player = (ExtendedEmptyHorizonsPlayer) ((EntityPlayer) sender)
+         * .getExtendedProperties(ExtendedEmptyHorizonsPlayer.EXT_PROP_NAME);
+         * int expeditionTime = player.getExpeditionTime();
+         * expeditionTime = expeditionTime + 1;
+         * player.setExpeditionTime(expeditionTime);
+         * player.debugMessage();
+         */
 
         if (!world.isRemote) {
-            // send worlds fog data
-
             sender.addChatMessage(new ChatComponentText("Teleporting"));
             EmptyDimTeleporter.teleportToEmptyDim((EntityPlayer) sender, 0, 100, 0, 0, 0);
             return;
         }
+
     }
 
     @Override

@@ -5,10 +5,8 @@ import java.util.Map;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.nfdobbs.emptyhorizons.network.FogDataMessage;
-import com.nfdobbs.emptyhorizons.network.FogDataMessageHandler;
-import com.nfdobbs.emptyhorizons.network.SyncMessage;
-import com.nfdobbs.emptyhorizons.network.SyncMessageHandler;
+import com.nfdobbs.emptyhorizons.blocks.EmptyHorizonBlocks;
+import com.nfdobbs.emptyhorizons.network.*;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -31,7 +29,10 @@ public class CommonProxy {
 
         networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(EmptyHorizons.MODID);
         networkWrapper.registerMessage(SyncMessageHandler.class, SyncMessage.class, 0, Side.CLIENT);
-        networkWrapper.registerMessage(FogDataMessageHandler.class, FogDataMessage.class, 1, Side.CLIENT);
+        networkWrapper.registerMessage(FogDataMessageHandler.class, FogDataMessage.class, 5, Side.CLIENT);
+        networkWrapper.registerMessage(TravelButtonMessageHandler.class, TravelButtonMessage.class, 10, Side.SERVER);
+
+        EmptyHorizonBlocks.init();
 
         EmptyHorizons.LOG.info(Config.greeting);
         EmptyHorizons.LOG.info("I am Empty Horizons at version " + Tags.VERSION);
