@@ -1,5 +1,6 @@
 package com.nfdobbs.emptyhorizons.util;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -48,18 +49,43 @@ public class OverworldTeleporter extends Teleporter {
                 player.setLocationAndAngles(x, 100, z, playerMP.rotationYaw, playerMP.rotationPitch);
                 player.setPositionAndUpdate(x, 100, z);
             } else {
+
+                WorldServer worldServer = playerMP.mcServer.worldServerForDimension(dim);
+
+                int y = getTopBlock(x, z, worldServer) + 3;
+
                 playerMP.mcServer.getConfigurationManager()
                     .transferPlayerToDimension(
                         playerMP,
                         dim,
                         new OverworldTeleporter(
-                            playerMP.mcServer.worldServerForDimension(dim),
-                            x,
-                            100,
-                            z,
+                            worldServer,
+                            x + .5,
+                            y,
+                            z + .5,
                             playerMP.rotationYaw,
                             playerMP.rotationPitch));
+
+                playerMP.mcServer.worldServerForDimension(dim)
+                    .setBlock(x, y - 2, z, Block.getBlockById(20));
             }
         }
+    }
+
+    private static int getTopBlock(int x, int z, WorldServer worldServer) {
+
+        int worldHeight = 255;
+        int y = worldHeight;
+        boolean blockFound = false;
+
+        while (y > 1) {
+            if (!worldServer.isAirBlock(x, y, z)) {
+                return y;
+            }
+
+            y = y - 1;
+        }
+
+        return worldHeight;
     }
 }

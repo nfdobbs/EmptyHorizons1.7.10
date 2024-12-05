@@ -7,23 +7,27 @@ public class SyncMessage implements IMessage {
 
     public int MaxExpeditionTime;
     public int ExpeditionTime;
+    public boolean DoingChallenge;
 
     public SyncMessage() {}
 
-    public SyncMessage(int maxExpeditionTime, int expeditionTime) {
+    public SyncMessage(int maxExpeditionTime, int expeditionTime, boolean doingChallenge) {
         MaxExpeditionTime = maxExpeditionTime;
         ExpeditionTime = expeditionTime;
+        DoingChallenge = doingChallenge;
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
         this.MaxExpeditionTime = buf.readInt();
         this.ExpeditionTime = buf.readInt();
+        this.DoingChallenge = buf.readBoolean();
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeInt(MaxExpeditionTime);
         buf.writeInt(ExpeditionTime);
+        buf.writeBoolean(DoingChallenge);
     }
 }

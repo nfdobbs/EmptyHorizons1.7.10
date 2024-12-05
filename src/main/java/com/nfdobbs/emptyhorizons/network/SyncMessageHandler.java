@@ -20,6 +20,8 @@ public class SyncMessageHandler implements IMessageHandler<SyncMessage, IMessage
 
             player.setMaxExpeditionTime(message.MaxExpeditionTime);
             player.setExpeditionTime(message.ExpeditionTime);
+            player.setDoingChallenge(message.DoingChallenge);
+
         }
 
         return null;

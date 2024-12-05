@@ -1,6 +1,5 @@
 package com.nfdobbs.emptyhorizons.EmptyDimension;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -53,10 +52,13 @@ public class EmptyDimTeleporter extends Teleporter {
                     .transferPlayerToDimension(
                         playerMP,
                         dim,
-                        new EmptyDimTeleporter(playerMP.mcServer.worldServerForDimension(dim), x, y, z, yaw, pitch));
-
-                playerMP.mcServer.worldServerForDimension(dim)
-                    .setBlock((int) (x), (int) (y - 2), (int) (z), Block.getBlockById(20));
+                        new EmptyDimTeleporter(
+                            playerMP.mcServer.worldServerForDimension(dim),
+                            x + .5,
+                            y,
+                            z + .5,
+                            yaw,
+                            pitch));
             }
         }
     }

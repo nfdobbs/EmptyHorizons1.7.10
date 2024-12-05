@@ -17,7 +17,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new EmptyHorizonsOverlay(Minecraft.getMinecraft()));
-        MinecraftForge.EVENT_BUS.register(new FogHandler());
+        MinecraftForge.EVENT_BUS.register(new FogHandler(Minecraft.getMinecraft()));
         super.init(event);
     }
 }

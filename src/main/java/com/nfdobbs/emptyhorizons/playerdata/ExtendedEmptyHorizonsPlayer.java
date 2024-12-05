@@ -11,6 +11,7 @@ import net.minecraftforge.common.IExtendedEntityProperties;
 
 import com.nfdobbs.emptyhorizons.CommonProxy;
 import com.nfdobbs.emptyhorizons.Config;
+import com.nfdobbs.emptyhorizons.EmptyHorizons;
 import com.nfdobbs.emptyhorizons.network.SyncMessage;
 
 import betterquesting.api.properties.NativeProps;
@@ -119,6 +120,16 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
         sync();
     }
 
+    public boolean isDoingChallenge() {
+        return doingChallenge;
+    }
+
+    public void setDoingChallenge(boolean isDoingChallenge) {
+        EmptyHorizons.LOG.info("Setting Challenge");
+        this.doingChallenge = isDoingChallenge;
+        sync();
+    }
+
     public void giveQuestReward(QuestInstance quest, List<String> questLineNames) {
         int rewardTime = 0;
 
@@ -166,7 +177,7 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
             int expeditionTime = getExpeditionTime();
 
             CommonProxy.networkWrapper
-                .sendTo(new SyncMessage(maxExpeditionTime, expeditionTime), (EntityPlayerMP) player);
+                .sendTo(new SyncMessage(maxExpeditionTime, expeditionTime, doingChallenge), (EntityPlayerMP) player);
         }
     }
 

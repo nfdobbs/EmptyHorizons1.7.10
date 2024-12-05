@@ -20,12 +20,18 @@ public class EmptyHorizonsOverlay extends Gui {
     }
 
     @SubscribeEvent(priority = EventPriority.NORMAL)
-    public void onRenderExperience(RenderGameOverlayEvent.Post event) {
-        if (event.isCanceled() || event.type != RenderGameOverlayEvent.ElementType.EXPERIENCE) {
+    public void onRenderText(RenderGameOverlayEvent.Post event) {
+
+        if (event.isCanceled() || mc.gameSettings.showDebugInfo
+            || event.type != RenderGameOverlayEvent.ElementType.TEXT) {
             return;
         }
 
         ExtendedEmptyHorizonsPlayer player = ExtendedEmptyHorizonsPlayer.get(this.mc.thePlayer);
+
+        if (!player.isDoingChallenge()) {
+            return;
+        }
 
         int expeditionTime = player.getExpeditionTime();
         int maxExpeditionTime = player.getMaxExpeditionTime();

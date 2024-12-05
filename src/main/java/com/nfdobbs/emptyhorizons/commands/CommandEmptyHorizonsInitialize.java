@@ -2,13 +2,17 @@ package com.nfdobbs.emptyhorizons.commands;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 
+import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimRegister;
 import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimTeleporter;
+import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
 
 public class CommandEmptyHorizonsInitialize implements ICommand {
 
@@ -42,8 +46,20 @@ public class CommandEmptyHorizonsInitialize implements ICommand {
 
         if (!world.isRemote) {
             sender.addChatMessage(new ChatComponentText("Teleporting"));
-            EmptyDimTeleporter.teleportToEmptyDim((EntityPlayer) sender, 0, 100, 0, 0, 0);
-            return;
+
+            int x = 0;
+            int y = 100;
+            int z = 0;
+
+            ExtendedEmptyHorizonsPlayer player = (ExtendedEmptyHorizonsPlayer) ((EntityPlayer) sender)
+                .getExtendedProperties(ExtendedEmptyHorizonsPlayer.EXT_PROP_NAME);
+
+            player.setDoingChallenge(!player.isDoingChallenge());
+
+            EmptyDimTeleporter.teleportToEmptyDim((EntityPlayer) sender, x, y, z, 0, 0);
+
+            ((EntityPlayerMP) sender).mcServer.worldServerForDimension(EmptyDimRegister.EMPTY_DIMENSION_ID)
+                .setBlock(x, y - 2, z, Block.getBlockById(20));
         }
 
     }

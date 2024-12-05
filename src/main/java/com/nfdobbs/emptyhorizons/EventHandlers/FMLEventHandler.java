@@ -17,13 +17,17 @@ public class FMLEventHandler {
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         EntityPlayer player = event.player;
 
-        if (event.phase == TickEvent.Phase.END && !player.worldObj.isRemote && player.isEntityAlive()) {
+        ExtendedEmptyHorizonsPlayer ehPlayer = ExtendedEmptyHorizonsPlayer.get(player);
+
+        if (ehPlayer.isDoingChallenge() && event.phase == TickEvent.Phase.END
+            && !player.worldObj.isRemote
+            && player.isEntityAlive()) {
             tickCounter++;
 
             if (tickCounter % 20 == 0) {
                 tickCounter = 0;
 
-                ExtendedEmptyHorizonsPlayer ehPlayer = ExtendedEmptyHorizonsPlayer.get(player);
+                // ExtendedEmptyHorizonsPlayer ehPlayer = ExtendedEmptyHorizonsPlayer.get(player);
                 int maxExpTime = ehPlayer.getMaxExpeditionTime();
                 int currentExpTime = ehPlayer.getExpeditionTime();
 
