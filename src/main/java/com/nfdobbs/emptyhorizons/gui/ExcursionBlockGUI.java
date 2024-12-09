@@ -16,9 +16,12 @@ import com.nfdobbs.emptyhorizons.util.ExcursionCoords;
 
 public class ExcursionBlockGUI extends GuiScreen {
 
+    private int clickedBlockx;
+    private int clickedBlocky;
+    private int clickedBlockz;
+
     private static ResourceLocation blankGui;
     private GuiButton travelButton;
-    private ExcursionCoords travelCoords;
 
     private static final int BLANK_GUI_HEIGHT = 256;
     private static final int BLANK_GUI_WIDTH = 256;
@@ -28,6 +31,12 @@ public class ExcursionBlockGUI extends GuiScreen {
     private static final int BLANK_GUI_EMPTY_OFFSET_WIDTH = 40;
     private static final int BLANK_GUI_TEXT_OFFSET_HEIGHT = 15;
     private static final int BLANK_GUI_TEXT_OFFSET_WIDTH = 15;
+
+    public ExcursionBlockGUI(int x, int y, int z) {
+        clickedBlockx = x;
+        clickedBlocky = y;
+        clickedBlockz = z;
+    }
 
     public void initGui() {
         buttonList.clear();
@@ -51,7 +60,8 @@ public class ExcursionBlockGUI extends GuiScreen {
         if (button == travelButton) {
             EmptyHorizons.LOG.info("Button Clicked");
 
-            CommonProxy.networkWrapper.sendToServer(new TravelButtonMessage(travelCoords));
+            CommonProxy.networkWrapper
+                .sendToServer(new TravelButtonMessage(clickedBlockx, clickedBlocky, clickedBlockz));
         }
     }
 
@@ -63,25 +73,53 @@ public class ExcursionBlockGUI extends GuiScreen {
 
         Minecraft minecraft = Minecraft.getMinecraft();
 
-        ScaledResolution sr = new ScaledResolution(minecraft, minecraft.displayWidth, minecraft.displayHeight);
-        int xOffset = (width - BLANK_GUI_WIDTH) / 2;
-        int yOffset = (height - BLANK_GUI_HEIGHT) / 2;
+        TileEntityExcursionBlock tileEntityExcursionBlock = (TileEntityExcursionBlock) minecraft.theWorld
+            .getTileEntity(clickedBlockx, clickedBlocky, clickedBlockz);
 
-        drawTexturedModalRect(xOffset, yOffset, 0, 0, BLANK_GUI_WIDTH, BLANK_GUI_HEIGHT);
+        if (tileEntityExcursionBlock != null) {
+            String textCoords;
 
-        double days = minecraft.theWorld.getTotalWorldTime() / 24000.00;
-        travelCoords = TileEntityExcursionBlock.getExcursionCoords(days);
+            if (tileEntityExcursionBlock.inUse) {
+                textCoords = String.format(
+                    "Location: X: %d, Z: %d",
+                    tileEntityExcursionBlock.targetBlockX,
+                    tileEntityExcursionBlock.targetBlockZ);
+            } else {
+                double days = minecraft.theWorld.getTotalWorldTime() / 24000.00;
+                ExcursionCoords travelCoords = TileEntityExcursionBlock.getExcursionCoords(days);
 
-        String textCoords = String.format("Location: X: %d, Z: %d", travelCoords.x, travelCoords.z);
-        int coordsWidth = fontRendererObj.getStringWidth(textCoords);
+                textCoords = String.format("Location: X: %d, Z: %d", travelCoords.x, travelCoords.z);
+            }
 
-        fontRendererObj.drawString(
-            textCoords,
-            xOffset + BLANK_GUI_EMPTY_OFFSET_WIDTH + BLANK_GUI_TEXT_OFFSET_WIDTH,
-            yOffset + BLANK_GUI_EMPTY_OFFSET_HEIGHT + BLANK_GUI_TEXT_OFFSET_HEIGHT,
-            0);
+            ScaledResolution sr = new ScaledResolution(minecraft, minecraft.displayWidth, minecraft.displayHeight);
+            int xOffset = (width - BLANK_GUI_WIDTH) / 2;
+            int yOffset = (height - BLANK_GUI_HEIGHT) / 2;
 
-        super.drawScreen(parWidth, parHeight, p_73863_3_);
+            drawTexturedModalRect(xOffset, yOffset, 0, 0, BLANK_GUI_WIDTH, BLANK_GUI_HEIGHT);
+
+            fontRendererObj.drawString(
+                textCoords,
+                xOffset + BLANK_GUI_EMPTY_OFFSET_WIDTH + BLANK_GUI_TEXT_OFFSET_WIDTH,
+                yOffset + BLANK_GUI_EMPTY_OFFSET_HEIGHT + BLANK_GUI_TEXT_OFFSET_HEIGHT,
+                0);
+
+            if (tileEntityExcursionBlock.inUse) {
+                String attemptsRemaining = String.format(
+                    "Attempts: %d/%d",
+                    tileEntityExcursionBlock.attemptsRemaining,
+                    tileEntityExcursionBlock.getMaxAttempts());
+
+                fontRendererObj.drawString(
+                    attemptsRemaining,
+                    xOffset + BLANK_GUI_EMPTY_OFFSET_WIDTH + BLANK_GUI_TEXT_OFFSET_WIDTH,
+                    yOffset + BLANK_GUI_EMPTY_OFFSET_HEIGHT
+                        + BLANK_GUI_TEXT_OFFSET_HEIGHT
+                        + BLANK_GUI_TEXT_OFFSET_HEIGHT,
+                    0);
+            }
+
+            super.drawScreen(parWidth, parHeight, p_73863_3_);
+        }
     }
 
     private GuiButton makeTravelButton() {

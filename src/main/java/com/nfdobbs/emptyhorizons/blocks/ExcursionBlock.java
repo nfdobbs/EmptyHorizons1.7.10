@@ -1,21 +1,26 @@
 package com.nfdobbs.emptyhorizons.blocks;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 import com.nfdobbs.emptyhorizons.EmptyHorizons;
 import com.nfdobbs.emptyhorizons.gui.ExcursionBlockGUI;
+import com.nfdobbs.emptyhorizons.tileentities.TileEntityExcursionBlock;
 
-public class ExcursionBlock extends Block {
+public class ExcursionBlock extends Block implements ITileEntityProvider {
 
     public IIcon ExcursionBlockFront;
     public IIcon ExcursionBlockFrontEast;
@@ -31,8 +36,8 @@ public class ExcursionBlock extends Block {
     private static final int EXCURSION_BLOCK_HARVEST_LEVEL = 3;
     private static final Float EXCURSION_BLOCK_RESISTANCE = 2000.0F;
 
-    private final int UP_OFFSET = 5;
-    private final int DOWN_OFFSET = 9;
+    public static final int UP_OFFSET = 5;
+    public static final int DOWN_OFFSET = 9;
 
     protected ExcursionBlock(Material materialIn) {
         super(materialIn);
@@ -94,13 +99,6 @@ public class ExcursionBlock extends Block {
         return textureSideStates[meta][side];
     }
 
-    /*
-     * @Override
-     * public TileEntity createTileEntity(World world, int metadata) {
-     * return new TileEntityExcursionBlock();
-     * }
-     */
-
     @Override
     public int onBlockPlaced(World worldIn, int x, int y, int z, int side, float subX, float subY, float subZ,
         int meta) {
@@ -131,11 +129,60 @@ public class ExcursionBlock extends Block {
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7,
         float par8, float par9) {
 
-        if (world.isRemote) {
-            Minecraft.getMinecraft()
-                .displayGuiScreen(new ExcursionBlockGUI());
+        // Get Tile Entity
+
+        TileEntityExcursionBlock tileEntityExcursionBlock = (TileEntityExcursionBlock) world.getTileEntity(x, y, z);
+
+        if (tileEntityExcursionBlock != null) {
+
+            // Check Player Names
+            if (!tileEntityExcursionBlock.inUse
+                || (tileEntityExcursionBlock.currentUser.equals(player.getDisplayName()))) {
+
+                if (tileEntityExcursionBlock.attemptsRemaining < 1) {
+                    if (!world.isRemote) {
+                        EntityPlayerMP playerMP = (EntityPlayerMP) player;
+
+                        WorldServer overworld = playerMP.mcServer.worldServerForDimension(0);
+                        overworld.setBlockToAir(
+                            tileEntityExcursionBlock.targetBlockX,
+                            tileEntityExcursionBlock.targetBlockY,
+                            tileEntityExcursionBlock.targetBlockZ);
+
+                        overworld.notifyBlockChange(
+                            tileEntityExcursionBlock.targetBlockX,
+                            tileEntityExcursionBlock.targetBlockY,
+                            tileEntityExcursionBlock.targetBlockZ,
+                            getBlockById(0));
+
+                        overworld.removeTileEntity(
+                            tileEntityExcursionBlock.targetBlockX,
+                            tileEntityExcursionBlock.targetBlockY,
+                            tileEntityExcursionBlock.targetBlockZ);
+                    }
+
+                    tileEntityExcursionBlock.reset();
+                }
+
+                if (world.isRemote) {
+                    Minecraft.getMinecraft()
+                        .displayGuiScreen(new ExcursionBlockGUI(x, y, z));
+                }
+
+                return true;
+            }
         }
 
-        return true;
+        return false;
+    }
+
+    @Override
+    public void breakBlock(World worldIn, int x, int y, int z, Block blockBroken, int meta) {
+        super.breakBlock(worldIn, x, y, z, blockBroken, meta);
+    }
+
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new TileEntityExcursionBlock();
     }
 }

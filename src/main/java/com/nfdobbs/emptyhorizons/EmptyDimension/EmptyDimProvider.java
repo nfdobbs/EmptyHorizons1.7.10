@@ -14,5 +14,4 @@ public class EmptyDimProvider extends WorldProvider {
     public IChunkProvider createChunkGenerator() {
         return new EmptyDimChunkGenerator(super.worldObj);
     }
-
 }

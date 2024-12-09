@@ -85,7 +85,6 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
 
         NBTTagCompound savedData = new NBTTagCompound();
         playerData.saveNBTData(savedData);
-
         CommonProxy.storeEntityData(getSaveKey(player), savedData);
     }
 
@@ -96,6 +95,7 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
 
         if (savedData != null) {
             playerData.loadNBTData(savedData);
+            playerData.sync();
         } else {
             playerData.sync();
         }

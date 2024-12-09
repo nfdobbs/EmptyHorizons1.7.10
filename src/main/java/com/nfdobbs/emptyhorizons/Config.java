@@ -20,6 +20,11 @@ public class Config {
     private final static int MAX_STARTING_EXPOSURE = 3600;
     private final static String STARTING_EXPOSURE_TIME_COMMENT = "Initial Max Exposure Time.";
 
+    public static int maxExcursionAttempts = 5;
+    private final static int MIN_EXCURSION_ATTEMPTS = 1;
+    private final static int MAX_EXCURSION_ATTEMPTS = 1000;
+    private final static String EXCURSION_ATTEMPTS_COMMENT = "Number of attempts to allow per location.";
+
     // Base Main Quest Rewards
     public static int baseMainQuestReward = 10;
     private final static int MIN_BASE_MAIN_QUEST_REWARD = 0;
@@ -48,6 +53,14 @@ public class Config {
             MIN_STARTING_EXPOSURE,
             MAX_STARTING_EXPOSURE,
             STARTING_EXPOSURE_TIME_COMMENT);
+
+        maxExcursionAttempts = configuration.getInt(
+            "maxExcursionAttempts",
+            Configuration.CATEGORY_GENERAL,
+            maxExcursionAttempts,
+            MIN_EXCURSION_ATTEMPTS,
+            MAX_EXCURSION_ATTEMPTS,
+            EXCURSION_ATTEMPTS_COMMENT);
 
         baseMainQuestReward = configuration.getInt(
             "baseMainQuestReward",

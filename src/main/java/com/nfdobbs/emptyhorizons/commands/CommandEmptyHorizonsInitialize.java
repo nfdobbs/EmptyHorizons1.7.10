@@ -2,16 +2,17 @@ package com.nfdobbs.emptyhorizons.commands;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
 import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimRegister;
 import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimTeleporter;
+import com.nfdobbs.emptyhorizons.blocks.EmptyHorizonBlocks;
+import com.nfdobbs.emptyhorizons.blocks.ExcursionBlock;
 import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
 
 public class CommandEmptyHorizonsInitialize implements ICommand {
@@ -35,18 +36,7 @@ public class CommandEmptyHorizonsInitialize implements ICommand {
     public void processCommand(ICommandSender sender, String[] args) {
         World world = sender.getEntityWorld();
 
-        /*
-         * ExtendedEmptyHorizonsPlayer player = (ExtendedEmptyHorizonsPlayer) ((EntityPlayer) sender)
-         * .getExtendedProperties(ExtendedEmptyHorizonsPlayer.EXT_PROP_NAME);
-         * int expeditionTime = player.getExpeditionTime();
-         * expeditionTime = expeditionTime + 1;
-         * player.setExpeditionTime(expeditionTime);
-         * player.debugMessage();
-         */
-
         if (!world.isRemote) {
-            sender.addChatMessage(new ChatComponentText("Teleporting"));
-
             int x = 0;
             int y = 100;
             int z = 0;
@@ -59,9 +49,15 @@ public class CommandEmptyHorizonsInitialize implements ICommand {
             EmptyDimTeleporter.teleportToEmptyDim((EntityPlayer) sender, x, y, z, 0, 0);
 
             ((EntityPlayerMP) sender).mcServer.worldServerForDimension(EmptyDimRegister.EMPTY_DIMENSION_ID)
-                .setBlock(x, y - 2, z, Block.getBlockById(20));
-        }
+                .setBlock(x, y - 2, z, EmptyHorizonBlocks.excursionBlock);
 
+            ((EntityPlayerMP) sender).mcServer.worldServerForDimension(EmptyDimRegister.EMPTY_DIMENSION_ID)
+                .setBlockMetadataWithNotify(x, y - 2, z, ExcursionBlock.DOWN_OFFSET, 2);
+
+            ChunkCoordinates spawnCoords = new ChunkCoordinates(x, y, z);
+
+            ((EntityPlayer) sender).setSpawnChunk(spawnCoords, true, EmptyDimRegister.EMPTY_DIMENSION_ID);
+        }
     }
 
     @Override
