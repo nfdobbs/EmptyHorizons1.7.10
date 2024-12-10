@@ -1,5 +1,6 @@
 package com.nfdobbs.emptyhorizons.blocks;
 
+import com.nfdobbs.emptyhorizons.gui.ExcursionBlockGUI;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -17,7 +18,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 import com.nfdobbs.emptyhorizons.EmptyHorizons;
-import com.nfdobbs.emptyhorizons.gui.ExcursionBlockGUI;
 import com.nfdobbs.emptyhorizons.tileentities.TileEntityExcursionBlock;
 
 public class ExcursionBlock extends Block implements ITileEntityProvider {
@@ -166,7 +166,7 @@ public class ExcursionBlock extends Block implements ITileEntityProvider {
 
                 if (world.isRemote) {
                     Minecraft.getMinecraft()
-                        .displayGuiScreen(new ExcursionBlockGUI(x, y, z));
+                     .displayGuiScreen(new ExcursionBlockGUI(x, y, z));
                 }
 
                 return true;
