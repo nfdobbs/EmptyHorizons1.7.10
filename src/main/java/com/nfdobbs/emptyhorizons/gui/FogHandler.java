@@ -9,14 +9,13 @@ import org.lwjgl.opengl.GL11;
 import com.nfdobbs.emptyhorizons.ClientProxy;
 import com.nfdobbs.emptyhorizons.EmptyHorizons;
 import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
-import com.nfdobbs.emptyhorizons.worlddata.FogProvider;
 import com.nfdobbs.emptyhorizons.worlddata.FogRecord;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class FogHandler {
 
-    private FogProvider fogProvider = ClientProxy.fogProvider;
+    // private FogProvider fogProvider = ClientProxy.fogProvider;
     final private Minecraft mc;
 
     public FogHandler(Minecraft minecraft) {
@@ -32,7 +31,7 @@ public class FogHandler {
             return;
         }
 
-        FogRecord fogRecord = fogProvider
+        FogRecord fogRecord = ClientProxy.fogProvider
             .GetFogRecord(event.entity.worldObj, event.entity.worldObj.provider.dimensionId);
 
         // For some reason when we cancel the event we never get back into GL11.GL_EXP mode
@@ -59,7 +58,7 @@ public class FogHandler {
             return;
         }
 
-        FogRecord fogRecord = fogProvider
+        FogRecord fogRecord = ClientProxy.fogProvider
             .GetFogRecord(event.entity.worldObj, event.entity.worldObj.provider.dimensionId);
 
         /*

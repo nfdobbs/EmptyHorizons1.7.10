@@ -16,6 +16,7 @@ public class EmptyDimChunkGenerator implements IChunkProvider {
     protected World world;
 
     public EmptyDimChunkGenerator(World worldIn) {
+        super();
         world = worldIn;
     }
 
