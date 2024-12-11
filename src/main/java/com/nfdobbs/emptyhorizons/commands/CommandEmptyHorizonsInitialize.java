@@ -44,8 +44,6 @@ public class CommandEmptyHorizonsInitialize implements ICommand {
             ExtendedEmptyHorizonsPlayer player = (ExtendedEmptyHorizonsPlayer) ((EntityPlayer) sender)
                 .getExtendedProperties(ExtendedEmptyHorizonsPlayer.EXT_PROP_NAME);
 
-            player.setDoingChallenge(!player.isDoingChallenge());
-
             EmptyDimTeleporter.teleportToEmptyDim((EntityPlayer) sender, x, y, z, 0, 0);
 
             ((EntityPlayerMP) sender).mcServer.worldServerForDimension(EmptyDimRegister.EMPTY_DIMENSION_ID)

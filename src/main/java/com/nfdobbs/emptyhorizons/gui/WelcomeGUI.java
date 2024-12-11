@@ -8,7 +8,10 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import com.nfdobbs.emptyhorizons.CommonProxy;
 import com.nfdobbs.emptyhorizons.EmptyHorizons;
+import com.nfdobbs.emptyhorizons.network.PlaystyleMessage;
+import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
 
 public class WelcomeGUI extends GuiScreen {
 
@@ -44,6 +47,12 @@ public class WelcomeGUI extends GuiScreen {
         welcomeGui = new ResourceLocation(EmptyHorizons.MODID + ":textures/gui/WelcomeUI.png");
     }
 
+    @Override
+    protected void keyTyped(char typedChar, int keyCode) {
+        // Do nothing on escape
+        // Player must choose one
+    }
+
     public void updateScreen() {
 
     }
@@ -53,7 +62,20 @@ public class WelcomeGUI extends GuiScreen {
         return false;
     }
 
-    protected void actionPerformed(GuiButton button) {}
+    protected void actionPerformed(GuiButton button) {
+        if (button == vanillaButton || button == challengeButton) {
+
+            ExtendedEmptyHorizonsPlayer player = ExtendedEmptyHorizonsPlayer.get(this.mc.thePlayer);
+            player.setHasChosenPlaystyle(true);
+
+            boolean willDoChallenge = button == challengeButton;
+
+            // Send Packet
+            CommonProxy.networkWrapper.sendToServer(new PlaystyleMessage(willDoChallenge));
+
+            mc.displayGuiScreen(null);
+        }
+    }
 
     public void drawScreen(int parWidth, int parHeight, float p_73863_3_) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

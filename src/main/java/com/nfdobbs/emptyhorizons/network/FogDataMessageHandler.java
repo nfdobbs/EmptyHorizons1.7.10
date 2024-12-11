@@ -13,8 +13,11 @@ public class FogDataMessageHandler implements IMessageHandler<FogDataMessage, IM
     public IMessage onMessage(FogDataMessage message, MessageContext ctx) {
         // Safety check, I believe this is only fired on the client
         if (ctx.side.isClient()) {
+            boolean showWelcomeGUI = ClientProxy.fogProvider.showWelcomeMessage;
+
             ClientProxy.fogProvider = new FogProvider();
             ClientProxy.fogProvider.SetFogData(message.fogData);
+            ClientProxy.fogProvider.showWelcomeMessage = showWelcomeGUI;
         }
 
         return null;

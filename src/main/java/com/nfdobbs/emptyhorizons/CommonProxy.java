@@ -29,8 +29,10 @@ public class CommonProxy {
 
         networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(EmptyHorizons.MODID);
         networkWrapper.registerMessage(SyncMessageHandler.class, SyncMessage.class, 0, Side.CLIENT);
+        networkWrapper.registerMessage(ShowWelcomeGuiMessageHandler.class, ShowWelcomeGuiMessage.class, 2, Side.CLIENT);
         networkWrapper.registerMessage(FogDataMessageHandler.class, FogDataMessage.class, 5, Side.CLIENT);
         networkWrapper.registerMessage(TravelButtonMessageHandler.class, TravelButtonMessage.class, 10, Side.SERVER);
+        networkWrapper.registerMessage(PlaystyleMessageHandler.class, PlaystyleMessage.class, 11, Side.SERVER);
 
         EmptyHorizonBlocks.init();
 

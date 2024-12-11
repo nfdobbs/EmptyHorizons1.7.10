@@ -28,6 +28,12 @@ public class FogHandler {
         ExtendedEmptyHorizonsPlayer player = ExtendedEmptyHorizonsPlayer.get(this.mc.thePlayer);
 
         if (!player.isDoingChallenge() || event.entity.worldObj.provider.dimensionId == EmptyHorizons.SAFE_DIMENSION) {
+            if (ClientProxy.fogProvider.showWelcomeMessage && Minecraft.getMinecraft().currentScreen == null) {
+                Minecraft.getMinecraft()
+                    .displayGuiScreen(new WelcomeGUI());
+                ClientProxy.fogProvider.showWelcomeMessage = false;
+            }
+
             return;
         }
 

@@ -62,6 +62,8 @@ public class ExcursionBlockGUI extends GuiScreen {
 
             CommonProxy.networkWrapper
                 .sendToServer(new TravelButtonMessage(clickedBlockx, clickedBlocky, clickedBlockz));
+
+            mc.displayGuiScreen(null);
         }
     }
 

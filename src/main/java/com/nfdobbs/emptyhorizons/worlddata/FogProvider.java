@@ -12,6 +12,7 @@ public class FogProvider {
 
     protected World world;
     private FogData fogData;
+    public Boolean showWelcomeMessage = false;
 
     private static final float MIN_FOG_DENSITY = 0.05F;
     private static final float MAX_FOG_DENSITY = 0.5F;

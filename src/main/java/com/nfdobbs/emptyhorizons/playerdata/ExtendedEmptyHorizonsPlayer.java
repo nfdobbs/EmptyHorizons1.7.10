@@ -23,6 +23,7 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
     public final static String MAX_EXPEDITION_TIME_KEY = "MaxExpeditionTime";
     public final static String CURRENT_EXPEDITION_TIME_KEY = "CurrentExpeditionTime";
     public final static String DOING_CHALLENGE_KEY = "DoingChallenge";
+    public final static String HAS_CHOSEN_PLAYSTYLE_KEY = "HasChosenPlaystyle";
 
     private final EntityPlayer player;
 
@@ -31,6 +32,7 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
     private int mainQuestRewardTime = 10;
     private int optionalQuestRewardTime = 3;
     private boolean doingChallenge = false;
+    private boolean hasChosenPlaystyle = false;
 
     public ExtendedEmptyHorizonsPlayer(EntityPlayer player) {
         this.player = player;
@@ -60,6 +62,7 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
                 .getWatchableObjectInt(CURRENT_EXPEDITION_TIME_WATCHER));
 
         properties.setBoolean(DOING_CHALLENGE_KEY, doingChallenge);
+        properties.setBoolean(HAS_CHOSEN_PLAYSTYLE_KEY, hasChosenPlaystyle);
 
         // Use unique tags to avoid conflicts
         compound.setTag(EXT_PROP_NAME, properties);
@@ -74,6 +77,8 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
         maxExpeditionTime = properties.getInteger(MAX_EXPEDITION_TIME_KEY);
 
         doingChallenge = properties.getBoolean(DOING_CHALLENGE_KEY);
+
+        hasChosenPlaystyle = properties.getBoolean(HAS_CHOSEN_PLAYSTYLE_KEY);
     }
 
     private static String getSaveKey(EntityPlayer player) {
@@ -124,9 +129,18 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
         return doingChallenge;
     }
 
+    public boolean hasSetHasChosenPlaystyle() {
+        return hasChosenPlaystyle;
+    }
+
     public void setDoingChallenge(boolean isDoingChallenge) {
         EmptyHorizons.LOG.info("Setting Challenge");
         this.doingChallenge = isDoingChallenge;
+        sync();
+    }
+
+    public void setHasChosenPlaystyle(boolean hasChosenPlaystyle) {
+        this.hasChosenPlaystyle = hasChosenPlaystyle;
         sync();
     }
 
@@ -176,8 +190,9 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
         if (!player.worldObj.isRemote) {
             int expeditionTime = getExpeditionTime();
 
-            CommonProxy.networkWrapper
-                .sendTo(new SyncMessage(maxExpeditionTime, expeditionTime, doingChallenge), (EntityPlayerMP) player);
+            CommonProxy.networkWrapper.sendTo(
+                new SyncMessage(maxExpeditionTime, expeditionTime, doingChallenge, hasChosenPlaystyle),
+                (EntityPlayerMP) player);
         }
     }
 
