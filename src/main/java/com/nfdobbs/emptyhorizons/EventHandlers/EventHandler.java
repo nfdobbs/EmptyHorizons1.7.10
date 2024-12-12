@@ -41,12 +41,12 @@ public class EventHandler {
                 .getExtendedProperties(ExtendedEmptyHorizonsPlayer.EXT_PROP_NAME);
 
             if (!event.entity.worldObj.isRemote) {
+                // Setup persistent player data
+                ExtendedEmptyHorizonsPlayer.loadProxyData((EntityPlayer) event.entity);
+
                 if (!modPlayer.hasSetHasChosenPlaystyle()) {
                     CommonProxy.networkWrapper.sendTo(new ShowWelcomeGuiMessage(), (EntityPlayerMP) event.entity);
                 }
-
-                // Setup persistent player data
-                ExtendedEmptyHorizonsPlayer.loadProxyData((EntityPlayer) event.entity);
 
                 FogProvider serverFogProvider = new FogProvider();
                 serverFogProvider.GetFogRecord(event.entity.worldObj, event.entity.dimension);

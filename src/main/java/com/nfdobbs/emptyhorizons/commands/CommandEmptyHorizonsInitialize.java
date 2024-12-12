@@ -4,18 +4,20 @@ import java.util.List;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimRegister;
-import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimTeleporter;
-import com.nfdobbs.emptyhorizons.blocks.EmptyHorizonBlocks;
-import com.nfdobbs.emptyhorizons.blocks.ExcursionBlock;
-import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
+import com.nfdobbs.emptyhorizons.util.ExcursionCoords;
+import com.nfdobbs.emptyhorizons.util.SpawnCoordinates;
+import com.nfdobbs.emptyhorizons.worlddata.SpawnData;
 
 public class CommandEmptyHorizonsInitialize implements ICommand {
+
+    public static final String SPAWN_COUNT_KEY = "SpawnCount";
 
     @Override
     public String getCommandName() {
@@ -37,24 +39,30 @@ public class CommandEmptyHorizonsInitialize implements ICommand {
         World world = sender.getEntityWorld();
 
         if (!world.isRemote) {
-            int x = 0;
-            int y = 100;
-            int z = 0;
+            WorldServer worldServer = MinecraftServer.getServer()
+                .worldServerForDimension(EmptyDimRegister.EMPTY_DIMENSION_ID);
 
-            ExtendedEmptyHorizonsPlayer player = (ExtendedEmptyHorizonsPlayer) ((EntityPlayer) sender)
-                .getExtendedProperties(ExtendedEmptyHorizonsPlayer.EXT_PROP_NAME);
+            SpawnData data = SpawnData.forWorld(worldServer);
+            NBTTagCompound tag = data.getData();
 
-            EmptyDimTeleporter.teleportToEmptyDim((EntityPlayer) sender, x, y, z, 0, 0);
+            int spawnCount = tag.getInteger(SPAWN_COUNT_KEY);
 
-            ((EntityPlayerMP) sender).mcServer.worldServerForDimension(EmptyDimRegister.EMPTY_DIMENSION_ID)
-                .setBlock(x, y - 2, z, EmptyHorizonBlocks.excursionBlock);
+            if (spawnCount < 1) {
+                // I don't want players spawning at 0,0
+                spawnCount = 2;
+            } else {
+                spawnCount = spawnCount + 1;
+            }
 
-            ((EntityPlayerMP) sender).mcServer.worldServerForDimension(EmptyDimRegister.EMPTY_DIMENSION_ID)
-                .setBlockMetadataWithNotify(x, y - 2, z, ExcursionBlock.DOWN_OFFSET, 2);
+            tag.setInteger(SPAWN_COUNT_KEY, spawnCount);
 
-            ChunkCoordinates spawnCoords = new ChunkCoordinates(x, y, z);
+            // I don't understand how this would work
+            data.markDirty();
 
-            ((EntityPlayer) sender).setSpawnChunk(spawnCoords, true, EmptyDimRegister.EMPTY_DIMENSION_ID);
+            ExcursionCoords spawnCoords = SpawnCoordinates.getSpawnCoords(spawnCount);
+
+            sender.addChatMessage(
+                (new ChatComponentText("Spawns: " + spawnCount + " X: " + spawnCoords.x + " Z: " + spawnCoords.z)));
         }
     }
 

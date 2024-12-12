@@ -14,12 +14,19 @@ public class Config {
     private final static Float DEFAULT_FLOAT_VALUE = 1f;
     private final static String QUEST_LINE_MULTIPLIER_COMMENT = "BQ QuestLine names here will have their quest time reward multiplied by the given float value (0.25f - 100f).";
 
+    // Challenge Spawn Separation
+    public static int challengeSpawnSeparation = 1000;
+    private final static int MIN_CHALLENGE_SPAWN_SEPARATION = 50;
+    private final static int MAX_CHALLENGE_SPAWN_SEPARATION = 10000;
+    private final static String CHALLENGE_SPAWN_SEPARATION_COMMENT = "Distance that challenge players will spawn away from each other.";
+
     // Starting Time Values
     public static int startingExposureTime = 20;
     private final static int MIN_STARTING_EXPOSURE = 1;
     private final static int MAX_STARTING_EXPOSURE = 3600;
     private final static String STARTING_EXPOSURE_TIME_COMMENT = "Initial Max Exposure Time.";
 
+    // Max Excursion Attempts
     public static int maxExcursionAttempts = 5;
     private final static int MIN_EXCURSION_ATTEMPTS = 1;
     private final static int MAX_EXCURSION_ATTEMPTS = 1000;
@@ -45,6 +52,14 @@ public class Config {
         Configuration configuration = new Configuration(configFile);
 
         greeting = configuration.getString("greeting", Configuration.CATEGORY_GENERAL, greeting, "How shall I greet?");
+
+        challengeSpawnSeparation = configuration.getInt(
+            "challengeSpawnSeparation",
+            Configuration.CATEGORY_GENERAL,
+            challengeSpawnSeparation,
+            MIN_CHALLENGE_SPAWN_SEPARATION,
+            MAX_CHALLENGE_SPAWN_SEPARATION,
+            CHALLENGE_SPAWN_SEPARATION_COMMENT);
 
         startingExposureTime = configuration.getInt(
             "startingExposureTime",
