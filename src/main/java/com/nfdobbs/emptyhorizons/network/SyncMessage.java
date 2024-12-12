@@ -9,14 +9,17 @@ public class SyncMessage implements IMessage {
     public int ExpeditionTime;
     public boolean DoingChallenge;
     public boolean HasChosenPlaystyle;
+    public boolean HasUsedFreePartyTP;
 
     public SyncMessage() {}
 
-    public SyncMessage(int maxExpeditionTime, int expeditionTime, boolean doingChallenge, boolean hasChosenPlaystyle) {
+    public SyncMessage(int maxExpeditionTime, int expeditionTime, boolean doingChallenge, boolean hasChosenPlaystyle,
+        boolean hasUsedFreePartyTP) {
         MaxExpeditionTime = maxExpeditionTime;
         ExpeditionTime = expeditionTime;
         DoingChallenge = doingChallenge;
         HasChosenPlaystyle = hasChosenPlaystyle;
+        HasUsedFreePartyTP = hasUsedFreePartyTP;
     }
 
     @Override
@@ -25,6 +28,7 @@ public class SyncMessage implements IMessage {
         this.ExpeditionTime = buf.readInt();
         this.DoingChallenge = buf.readBoolean();
         this.HasChosenPlaystyle = buf.readBoolean();
+        this.HasUsedFreePartyTP = buf.readBoolean();
     }
 
     @Override
@@ -33,5 +37,6 @@ public class SyncMessage implements IMessage {
         buf.writeInt(ExpeditionTime);
         buf.writeBoolean(DoingChallenge);
         buf.writeBoolean(HasChosenPlaystyle);
+        buf.writeBoolean(HasUsedFreePartyTP);
     }
 }

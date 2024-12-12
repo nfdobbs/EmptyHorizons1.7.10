@@ -24,6 +24,7 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
     public final static String CURRENT_EXPEDITION_TIME_KEY = "CurrentExpeditionTime";
     public final static String DOING_CHALLENGE_KEY = "DoingChallenge";
     public final static String HAS_CHOSEN_PLAYSTYLE_KEY = "HasChosenPlaystyle";
+    public final static String HAS_USED_FREE_PARTY_TP_KEY = "HasUsedFreePartyTP";
 
     private final EntityPlayer player;
 
@@ -33,6 +34,7 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
     private int optionalQuestRewardTime = 3;
     private boolean doingChallenge = false;
     private boolean hasChosenPlaystyle = false;
+    private boolean hasUsedFreePartyTP = false;
 
     public ExtendedEmptyHorizonsPlayer(EntityPlayer player) {
         this.player = player;
@@ -63,6 +65,7 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
 
         properties.setBoolean(DOING_CHALLENGE_KEY, doingChallenge);
         properties.setBoolean(HAS_CHOSEN_PLAYSTYLE_KEY, hasChosenPlaystyle);
+        properties.setBoolean(HAS_USED_FREE_PARTY_TP_KEY, hasUsedFreePartyTP);
 
         // Use unique tags to avoid conflicts
         compound.setTag(EXT_PROP_NAME, properties);
@@ -79,6 +82,8 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
         doingChallenge = properties.getBoolean(DOING_CHALLENGE_KEY);
 
         hasChosenPlaystyle = properties.getBoolean(HAS_CHOSEN_PLAYSTYLE_KEY);
+
+        hasUsedFreePartyTP = properties.getBoolean(HAS_USED_FREE_PARTY_TP_KEY);
     }
 
     private static String getSaveKey(EntityPlayer player) {
@@ -144,6 +149,15 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
         sync();
     }
 
+    public void setHasUsedFreePartyTP(boolean hasUsedFreePartyTP) {
+        this.hasUsedFreePartyTP = hasUsedFreePartyTP;
+        sync();
+    }
+
+    public boolean getHasUsedFreePartyTP() {
+        return hasUsedFreePartyTP;
+    }
+
     public void giveQuestReward(QuestInstance quest, List<String> questLineNames) {
         int rewardTime = 0;
 
@@ -191,7 +205,12 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
             int expeditionTime = getExpeditionTime();
 
             CommonProxy.networkWrapper.sendTo(
-                new SyncMessage(maxExpeditionTime, expeditionTime, doingChallenge, hasChosenPlaystyle),
+                new SyncMessage(
+                    maxExpeditionTime,
+                    expeditionTime,
+                    doingChallenge,
+                    hasChosenPlaystyle,
+                    hasUsedFreePartyTP),
                 (EntityPlayerMP) player);
         }
     }

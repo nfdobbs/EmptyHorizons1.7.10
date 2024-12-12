@@ -57,7 +57,6 @@ public class EventHandler {
                 World currentWorld = event.entity.worldObj;
             }
         }
-
     }
 
     @SubscribeEvent

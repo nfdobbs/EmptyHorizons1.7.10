@@ -12,6 +12,7 @@ import com.nfdobbs.emptyhorizons.EventHandlers.BetterQuestingEventHandler;
 import com.nfdobbs.emptyhorizons.EventHandlers.EventHandler;
 import com.nfdobbs.emptyhorizons.EventHandlers.FMLEventHandler;
 import com.nfdobbs.emptyhorizons.commands.CommandEmptyHorizonsInitialize;
+import com.nfdobbs.emptyhorizons.commands.CommandEmptyHorizonsMoveToParty;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -77,5 +78,6 @@ public class EmptyHorizons {
     public void serverStarting(FMLServerStartingEvent event) {
         proxy.serverStarting(event);
         event.registerServerCommand(new CommandEmptyHorizonsInitialize());
+        event.registerServerCommand(new CommandEmptyHorizonsMoveToParty());
     }
 }
