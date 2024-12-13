@@ -9,16 +9,20 @@ import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
 
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class EmptyHorizonsOverlay extends Gui {
 
     private final Minecraft mc;
 
+    @SideOnly(Side.CLIENT)
     public EmptyHorizonsOverlay(Minecraft mc) {
         super();
         this.mc = mc;
     }
 
+    @SideOnly(Side.CLIENT)
     @SubscribeEvent(priority = EventPriority.NORMAL)
     public void onRenderText(RenderGameOverlayEvent.Post event) {
 
@@ -55,10 +59,11 @@ public class EmptyHorizonsOverlay extends Gui {
 
         drawString(mc.fontRenderer, "Lethal Exposure: " + expeditionTimeString, 2, 2, 0xFFFFFF);
 
-        drawString(mc.fontRenderer, maxExpeditionTimeString, 2, 15, 0xFF5555);
+        // drawString(mc.fontRenderer, maxExpeditionTimeString, 2, 15, 0xFF5555);
     }
 
-    private String CreateTimeString(int timeInSeconds) {
+    @SideOnly(Side.CLIENT)
+    public static String CreateTimeString(int timeInSeconds) {
         int minutes = timeInSeconds / 60;
         int seconds = timeInSeconds % 60;
 

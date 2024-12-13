@@ -3,15 +3,12 @@ package com.nfdobbs.emptyhorizons.EventHandlers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.AchievementEvent;
 
 import com.nfdobbs.emptyhorizons.CommonProxy;
-import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimRegister;
-import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimTeleporter;
 import com.nfdobbs.emptyhorizons.EmptyHorizons;
 import com.nfdobbs.emptyhorizons.Helpers;
 import com.nfdobbs.emptyhorizons.network.ShowWelcomeGuiMessage;
@@ -34,6 +31,25 @@ public class EventHandler {
     }
 
     @SubscribeEvent
+    public void onAchievement(AchievementEvent event) {
+        if (!event.entity.worldObj.isRemote) {
+            ExtendedEmptyHorizonsPlayer modPlayer = (ExtendedEmptyHorizonsPlayer) ((EntityPlayer) event.entity)
+                .getExtendedProperties(ExtendedEmptyHorizonsPlayer.EXT_PROP_NAME);
+
+            EntityPlayerMP player = (EntityPlayerMP) event.entityPlayer;
+
+            if (player.func_147099_x()
+                .hasAchievementUnlocked(event.achievement)) {
+                return;
+            }
+
+            if (modPlayer.isDoingChallenge()) {
+                modPlayer.giveAchievementReward();
+            }
+        }
+    }
+
+    @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinWorldEvent event) {
 
         if (event.entity instanceof EntityPlayer) {
@@ -52,9 +68,6 @@ public class EventHandler {
                 serverFogProvider.GetFogRecord(event.entity.worldObj, event.entity.dimension);
 
                 serverFogProvider.SyncFogData((EntityPlayerMP) event.entity);
-                EmptyHorizons.LOG.info("Syncing Fog Data");
-
-                World currentWorld = event.entity.worldObj;
             }
         }
     }
@@ -74,20 +87,6 @@ public class EventHandler {
 
             if (modPlayer.getExpeditionTime() < 1) {
                 modPlayer.setExpeditionTime(1);
-            }
-
-            if (modPlayer.isDoingChallenge()) {
-                ChunkCoordinates chunkCoordinates = player.getBedLocation(EmptyDimRegister.EMPTY_DIMENSION_ID);
-
-                if (chunkCoordinates != null) {
-                    EmptyDimTeleporter.teleportToEmptyDim(
-                        player,
-                        chunkCoordinates.posX,
-                        chunkCoordinates.posY,
-                        chunkCoordinates.posZ,
-                        0,
-                        0);
-                }
             }
         }
     }

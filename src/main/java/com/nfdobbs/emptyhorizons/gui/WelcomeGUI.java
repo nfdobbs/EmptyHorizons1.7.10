@@ -13,6 +13,9 @@ import com.nfdobbs.emptyhorizons.EmptyHorizons;
 import com.nfdobbs.emptyhorizons.network.PlaystyleMessage;
 import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class WelcomeGUI extends GuiScreen {
 
     private static ResourceLocation welcomeGui;
@@ -33,8 +36,10 @@ public class WelcomeGUI extends GuiScreen {
     private static final int WELCOME_GUI_BUTTON_MIDDLE_WIDTH = 6;
     private static final int WELCOME_GUI_BUTTON_OFFSET_BOTTOM = 22;
 
+    @SideOnly(Side.CLIENT)
     public WelcomeGUI() {}
 
+    @SideOnly(Side.CLIENT)
     public void initGui() {
         buttonList.clear();
 
@@ -47,21 +52,25 @@ public class WelcomeGUI extends GuiScreen {
         welcomeGui = new ResourceLocation(EmptyHorizons.MODID + ":textures/gui/WelcomeUI.png");
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
         // Do nothing on escape
         // Player must choose one
     }
 
+    @SideOnly(Side.CLIENT)
     public void updateScreen() {
 
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public boolean doesGuiPauseGame() {
         return false;
     }
 
+    @SideOnly(Side.CLIENT)
     protected void actionPerformed(GuiButton button) {
         if (button == vanillaButton || button == challengeButton) {
 
@@ -77,6 +86,7 @@ public class WelcomeGUI extends GuiScreen {
         }
     }
 
+    @SideOnly(Side.CLIENT)
     public void drawScreen(int parWidth, int parHeight, float p_73863_3_) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -101,6 +111,7 @@ public class WelcomeGUI extends GuiScreen {
 
     }
 
+    @SideOnly(Side.CLIENT)
     private GuiButton makeVanillaButton() {
         Minecraft minecraft = Minecraft.getMinecraft();
 
@@ -121,6 +132,7 @@ public class WelcomeGUI extends GuiScreen {
         return new GuiButton(0, xPosition, yPosition, btnWidth, btnHeight, text);
     }
 
+    @SideOnly(Side.CLIENT)
     private GuiButton makeChallengeButton() {
         Minecraft minecraft = Minecraft.getMinecraft();
 

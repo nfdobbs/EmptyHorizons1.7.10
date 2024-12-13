@@ -1,9 +1,11 @@
 package com.nfdobbs.emptyhorizons;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.nfdobbs.emptyhorizons.gui.EmptyHorizonsOverlay;
+import com.nfdobbs.emptyhorizons.gui.ExcursionBlockGUI;
 import com.nfdobbs.emptyhorizons.gui.FogHandler;
 import com.nfdobbs.emptyhorizons.worlddata.FogProvider;
 
@@ -20,4 +22,14 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(new FogHandler(Minecraft.getMinecraft()));
         super.init(event);
     }
+
+    public static EntityPlayer getPlayer() {
+        return Minecraft.getMinecraft().thePlayer;
+    }
+
+    public static void showExcursionScreen(int x, int y, int z) {
+        Minecraft.getMinecraft()
+            .displayGuiScreen(new ExcursionBlockGUI(x, y, z));
+    }
+
 }

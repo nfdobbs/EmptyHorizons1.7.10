@@ -5,9 +5,14 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManagerHell;
 import net.minecraft.world.chunk.IChunkProvider;
 
-import com.nfdobbs.emptyhorizons.EmptyHorizons;
-
 public class EmptyDimProvider extends WorldProvider {
+
+    public static BiomeGenBase emptyBiome;
+
+    public EmptyDimProvider() {
+        emptyBiome = new EmptyBiomeGen(176).setColor(40)
+            .setBiomeName("Empty Biome");
+    }
 
     @Override
     public String getDimensionName() {
@@ -21,11 +26,11 @@ public class EmptyDimProvider extends WorldProvider {
 
     @Override
     public BiomeGenBase getBiomeGenForCoords(int x, int z) {
-        return EmptyHorizons.emptyBiome;
+        return emptyBiome;
     }
 
     @Override
     public void registerWorldChunkManager() {
-        this.worldChunkMgr = new WorldChunkManagerHell(EmptyHorizons.emptyBiome, 0.5F);
+        this.worldChunkMgr = new WorldChunkManagerHell(emptyBiome, 0.5F);
     }
 }

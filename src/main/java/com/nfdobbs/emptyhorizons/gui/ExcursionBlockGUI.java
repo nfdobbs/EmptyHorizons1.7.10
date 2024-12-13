@@ -11,8 +11,12 @@ import org.lwjgl.opengl.GL11;
 import com.nfdobbs.emptyhorizons.CommonProxy;
 import com.nfdobbs.emptyhorizons.EmptyHorizons;
 import com.nfdobbs.emptyhorizons.network.TravelButtonMessage;
+import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
 import com.nfdobbs.emptyhorizons.tileentities.TileEntityExcursionBlock;
 import com.nfdobbs.emptyhorizons.util.ExcursionCoords;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ExcursionBlockGUI extends GuiScreen {
 
@@ -32,12 +36,14 @@ public class ExcursionBlockGUI extends GuiScreen {
     private static final int BLANK_GUI_TEXT_OFFSET_HEIGHT = 15;
     private static final int BLANK_GUI_TEXT_OFFSET_WIDTH = 15;
 
+    @SideOnly(Side.CLIENT)
     public ExcursionBlockGUI(int x, int y, int z) {
         clickedBlockx = x;
         clickedBlocky = y;
         clickedBlockz = z;
     }
 
+    @SideOnly(Side.CLIENT)
     public void initGui() {
         buttonList.clear();
 
@@ -47,18 +53,20 @@ public class ExcursionBlockGUI extends GuiScreen {
         blankGui = new ResourceLocation(EmptyHorizons.MODID + ":textures/gui/BlankUI.png");
     }
 
+    @SideOnly(Side.CLIENT)
     public void updateScreen() {
 
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean doesGuiPauseGame() {
         return false;
     }
 
+    @SideOnly(Side.CLIENT)
     protected void actionPerformed(GuiButton button) {
         if (button == travelButton) {
-            EmptyHorizons.LOG.info("Button Clicked");
 
             CommonProxy.networkWrapper
                 .sendToServer(new TravelButtonMessage(clickedBlockx, clickedBlocky, clickedBlockz));
@@ -67,6 +75,7 @@ public class ExcursionBlockGUI extends GuiScreen {
         }
     }
 
+    @SideOnly(Side.CLIENT)
     public void drawScreen(int parWidth, int parHeight, float p_73863_3_) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -88,7 +97,8 @@ public class ExcursionBlockGUI extends GuiScreen {
                     tileEntityExcursionBlock.targetBlockZ);
             } else {
                 double days = minecraft.theWorld.getTotalWorldTime() / 24000.00;
-                ExcursionCoords travelCoords = TileEntityExcursionBlock.getExcursionCoords(days);
+                ExcursionCoords travelCoords = TileEntityExcursionBlock
+                    .getExcursionCoords(days, clickedBlockx, clickedBlockz);
 
                 textCoords = String.format("Location: X: %d, Z: %d", travelCoords.x, travelCoords.z);
             }
@@ -105,6 +115,18 @@ public class ExcursionBlockGUI extends GuiScreen {
                 yOffset + BLANK_GUI_EMPTY_OFFSET_HEIGHT + BLANK_GUI_TEXT_OFFSET_HEIGHT,
                 0);
 
+            ExtendedEmptyHorizonsPlayer modPlayer = (ExtendedEmptyHorizonsPlayer) minecraft.thePlayer
+                .getExtendedProperties(ExtendedEmptyHorizonsPlayer.EXT_PROP_NAME);
+
+            String maxTime = "Max Expedition Time: "
+                + EmptyHorizonsOverlay.CreateTimeString(modPlayer.getMaxExpeditionTime());
+
+            fontRendererObj.drawString(
+                maxTime,
+                xOffset + BLANK_GUI_EMPTY_OFFSET_WIDTH + BLANK_GUI_TEXT_OFFSET_WIDTH,
+                yOffset + BLANK_GUI_EMPTY_OFFSET_HEIGHT + BLANK_GUI_TEXT_OFFSET_HEIGHT + BLANK_GUI_TEXT_OFFSET_HEIGHT,
+                0);
+
             if (tileEntityExcursionBlock.inUse) {
                 String attemptsRemaining = String.format(
                     "Attempts: %d/%d",
@@ -116,6 +138,7 @@ public class ExcursionBlockGUI extends GuiScreen {
                     xOffset + BLANK_GUI_EMPTY_OFFSET_WIDTH + BLANK_GUI_TEXT_OFFSET_WIDTH,
                     yOffset + BLANK_GUI_EMPTY_OFFSET_HEIGHT
                         + BLANK_GUI_TEXT_OFFSET_HEIGHT
+                        + BLANK_GUI_TEXT_OFFSET_HEIGHT
                         + BLANK_GUI_TEXT_OFFSET_HEIGHT,
                     0);
             }
@@ -124,6 +147,7 @@ public class ExcursionBlockGUI extends GuiScreen {
         }
     }
 
+    @SideOnly(Side.CLIENT)
     private GuiButton makeTravelButton() {
         Minecraft minecraft = Minecraft.getMinecraft();
 

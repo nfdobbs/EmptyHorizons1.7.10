@@ -1,8 +1,8 @@
 package com.nfdobbs.emptyhorizons.network;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.entity.player.EntityPlayer;
 
+import com.nfdobbs.emptyhorizons.ClientProxy;
 import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -15,7 +15,9 @@ public class SyncMessageHandler implements IMessageHandler<SyncMessage, IMessage
     public IMessage onMessage(SyncMessage message, MessageContext ctx) {
         // Safety check, I believe this is only fired on the client
         if (ctx.side.isClient()) {
-            EntityClientPlayerMP vanillaPlayer = Minecraft.getMinecraft().thePlayer;
+
+            EntityPlayer vanillaPlayer = ClientProxy.getPlayer();
+
             ExtendedEmptyHorizonsPlayer player = ExtendedEmptyHorizonsPlayer.get(vanillaPlayer);
 
             player.setMaxExpeditionTime(message.MaxExpeditionTime);

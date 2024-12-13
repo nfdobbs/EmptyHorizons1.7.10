@@ -49,7 +49,8 @@ public class TravelButtonMessageHandler implements IMessageHandler<TravelButtonM
             } else {
                 // Calculate location coords
                 double days = playerMP.worldObj.getTotalWorldTime() / 24000.00;
-                ExcursionCoords travelCoords = TileEntityExcursionBlock.getExcursionCoords(days);
+                ExcursionCoords travelCoords = TileEntityExcursionBlock
+                    .getExcursionCoords(days, message.tileEntityCoordsX, message.tileEntityCoordsZ);
 
                 x = travelCoords.x;
                 z = travelCoords.z;

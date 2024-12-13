@@ -62,7 +62,12 @@ public class BetterQuestingEventHandler {
                 List<String> currentQuestLineNames = FindQuestLineNames(currentQuestUUID);
 
                 if (currentQuest != null) {
-                    moddedPlayer.giveQuestReward(currentQuest, currentQuestLineNames);
+                    int repeatTime = currentQuest.getProperty(NativeProps.REPEAT_TIME);
+
+                    if (repeatTime < 0) {
+                        moddedPlayer.giveQuestReward(currentQuest, currentQuestLineNames);
+                    }
+
                 } else {
                     EmptyHorizons.LOG.warn("No quest found with UUID: {}", questDB.get(currentQuestUUID));
                 }

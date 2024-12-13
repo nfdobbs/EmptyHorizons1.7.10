@@ -101,11 +101,19 @@ public class TileEntityExcursionBlock extends TileEntity {
         markDirty();
     }
 
-    public static ExcursionCoords getExcursionCoords(double day) {
+    public static ExcursionCoords getExcursionCoords(double day, int clickedBlockX, int clickedBlockZ) {
         int decimal = (int) day;
         double fraction = day - decimal;
 
-        double degrees = (decimal % 60) * 6 + fraction;
+        int clamp = 60;
+
+        double clampedValue = decimal % clamp;
+
+        if (clampedValue % 2 == 0) {
+            clampedValue = clamp - clampedValue;
+        }
+
+        double degrees = (clampedValue) * 6 + fraction;
 
         int centerCircleX = 0;
         int centerCircleZ = 0;
@@ -113,6 +121,9 @@ public class TileEntityExcursionBlock extends TileEntity {
 
         int x = (int) (centerCircleX + circleRadius * Math.cos(Math.toRadians(degrees)));
         int z = (int) (centerCircleZ + circleRadius * Math.sin(Math.toRadians(degrees)));
+
+        x = x + clickedBlockX;
+        z = z + clickedBlockZ;
 
         return new ExcursionCoords(x, z);
     }

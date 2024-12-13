@@ -3,7 +3,6 @@ package com.nfdobbs.emptyhorizons.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,8 +15,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
+import com.nfdobbs.emptyhorizons.ClientProxy;
 import com.nfdobbs.emptyhorizons.EmptyHorizons;
-import com.nfdobbs.emptyhorizons.gui.ExcursionBlockGUI;
 import com.nfdobbs.emptyhorizons.tileentities.TileEntityExcursionBlock;
 
 public class ExcursionBlock extends Block implements ITileEntityProvider {
@@ -165,8 +164,7 @@ public class ExcursionBlock extends Block implements ITileEntityProvider {
                 }
 
                 if (world.isRemote) {
-                    Minecraft.getMinecraft()
-                        .displayGuiScreen(new ExcursionBlockGUI(x, y, z));
+                    ClientProxy.showExcursionScreen(x, y, z);
                 }
 
                 return true;

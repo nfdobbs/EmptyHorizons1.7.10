@@ -1,17 +1,14 @@
 package com.nfdobbs.emptyhorizons;
 
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyBiomeGen;
 import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimRegister;
 import com.nfdobbs.emptyhorizons.EventHandlers.BetterQuestingEventHandler;
 import com.nfdobbs.emptyhorizons.EventHandlers.EventHandler;
 import com.nfdobbs.emptyhorizons.EventHandlers.FMLEventHandler;
-import com.nfdobbs.emptyhorizons.commands.CommandEmptyHorizonsInitialize;
 import com.nfdobbs.emptyhorizons.commands.CommandEmptyHorizonsMoveToParty;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -33,7 +30,6 @@ public class EmptyHorizons {
     public static final Logger LOG = LogManager.getLogger(MODID);
 
     public static final int SAFE_DIMENSION = -404;
-    public static BiomeGenBase emptyBiome;
 
     @SidedProxy(
         clientSide = "com.nfdobbs.emptyhorizons.ClientProxy",
@@ -45,9 +41,6 @@ public class EmptyHorizons {
     // GameRegistry." (Remove if not needed)
     public void preInit(FMLPreInitializationEvent event) {
         EmptyDimRegister.registerDimensions();
-
-        emptyBiome = new EmptyBiomeGen(176).setColor(40)
-            .setBiomeName("Empty Biome");
 
         proxy.preInit(event);
     }
@@ -77,7 +70,6 @@ public class EmptyHorizons {
     // register server commands in this event handler (Remove if not needed)
     public void serverStarting(FMLServerStartingEvent event) {
         proxy.serverStarting(event);
-        event.registerServerCommand(new CommandEmptyHorizonsInitialize());
         event.registerServerCommand(new CommandEmptyHorizonsMoveToParty());
     }
 }

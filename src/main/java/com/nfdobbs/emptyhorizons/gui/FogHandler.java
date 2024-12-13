@@ -12,6 +12,8 @@ import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
 import com.nfdobbs.emptyhorizons.worlddata.FogRecord;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class FogHandler {
 
@@ -22,6 +24,7 @@ public class FogHandler {
         mc = minecraft;
     }
 
+    @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onFog(EntityViewRenderEvent.FogDensity event) {
 

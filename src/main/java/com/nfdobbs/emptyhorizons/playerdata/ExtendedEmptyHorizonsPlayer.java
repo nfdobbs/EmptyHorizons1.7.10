@@ -6,6 +6,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
@@ -30,8 +32,9 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
 
     public final static int CURRENT_EXPEDITION_TIME_WATCHER = 24;
     private int maxExpeditionTime = Config.startingExposureTime;
-    private int mainQuestRewardTime = 10;
-    private int optionalQuestRewardTime = 3;
+    private int mainQuestRewardTime = Config.baseMainQuestReward;
+    private int achievementRewardTime = Config.achievementReward;
+    private int optionalQuestRewardTime = Config.baseOptionalQuestReward;
     private boolean doingChallenge = false;
     private boolean hasChosenPlaystyle = false;
     private boolean hasUsedFreePartyTP = false;
@@ -172,7 +175,17 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
         float questMultiplier = getQuestMultiplier(questLineNames);
         rewardTime = Math.round(questBaseTime * questMultiplier);
 
+        if (isDoingChallenge()) {
+            EntityPlayerMP playerMP = (EntityPlayerMP) player;
+            playerMP.addChatMessage(
+                new ChatComponentText(EnumChatFormatting.GREEN + "Quest Complete! " + rewardTime + " seconds earned."));
+        }
+
         setMaxExpeditionTime(maxExpeditionTime + rewardTime);
+    }
+
+    public void giveAchievementReward() {
+        setMaxExpeditionTime(maxExpeditionTime + achievementRewardTime);
     }
 
     private float getQuestMultiplier(List<String> questLineNames) {
