@@ -48,15 +48,37 @@ public class EmptyDimTeleporter extends Teleporter {
                 player.setLocationAndAngles(x, y, z, yaw, pitch);
                 player.setPositionAndUpdate(x, y, z);
             } else {
+
+                double xCenter = 0;
+                double zCenter = 0;
+
+                if(x < 0)
+                {
+                    xCenter = -0.5;
+                }
+                else
+                {
+                    xCenter = 0.5;
+                }
+
+                if(z < 0)
+                {
+                    zCenter = -0.5;
+                }
+                else
+                {
+                    zCenter = 0.5;
+                }
+
                 playerMP.mcServer.getConfigurationManager()
                     .transferPlayerToDimension(
                         playerMP,
                         dim,
                         new EmptyDimTeleporter(
                             playerMP.mcServer.worldServerForDimension(dim),
-                            x + .5,
+                            x + xCenter,
                             y,
-                            z + .5,
+                            z + zCenter,
                             yaw,
                             pitch));
             }
