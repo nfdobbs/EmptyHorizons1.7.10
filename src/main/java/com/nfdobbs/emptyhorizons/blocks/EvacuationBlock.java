@@ -85,6 +85,12 @@ public class EvacuationBlock extends Block implements ITileEntityProvider {
 
                 if (tileEntityExcursionBlock != null) {
                     tileEntityExcursionBlock.reset();
+
+                    player.getEntityWorld()
+                        .markBlockForUpdate(
+                            tileEntityEvacuationBlock.returnBlockX,
+                            tileEntityEvacuationBlock.returnBlockY,
+                            tileEntityEvacuationBlock.returnBlockZ);
                 }
 
                 return true;

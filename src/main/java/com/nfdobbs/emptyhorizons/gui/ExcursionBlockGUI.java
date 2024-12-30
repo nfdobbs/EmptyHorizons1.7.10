@@ -83,6 +83,7 @@ public class ExcursionBlockGUI extends GuiScreen {
             .bindTexture(blankGui);
 
         Minecraft minecraft = Minecraft.getMinecraft();
+        double days = minecraft.theWorld.getTotalWorldTime() / 24000.00;
 
         TileEntityExcursionBlock tileEntityExcursionBlock = (TileEntityExcursionBlock) minecraft.theWorld
             .getTileEntity(clickedBlockx, clickedBlocky, clickedBlockz);
@@ -96,7 +97,6 @@ public class ExcursionBlockGUI extends GuiScreen {
                     tileEntityExcursionBlock.targetBlockX,
                     tileEntityExcursionBlock.targetBlockZ);
             } else {
-                double days = minecraft.theWorld.getTotalWorldTime() / 24000.00;
                 ExcursionCoords travelCoords = TileEntityExcursionBlock
                     .getExcursionCoords(days, clickedBlockx, clickedBlockz);
 
@@ -135,6 +135,21 @@ public class ExcursionBlockGUI extends GuiScreen {
 
                 fontRendererObj.drawString(
                     attemptsRemaining,
+                    xOffset + BLANK_GUI_EMPTY_OFFSET_WIDTH + BLANK_GUI_TEXT_OFFSET_WIDTH,
+                    yOffset + BLANK_GUI_EMPTY_OFFSET_HEIGHT
+                        + BLANK_GUI_TEXT_OFFSET_HEIGHT
+                        + BLANK_GUI_TEXT_OFFSET_HEIGHT
+                        + BLANK_GUI_TEXT_OFFSET_HEIGHT,
+                    0);
+            }
+            else
+            {
+                int timeToShift = (24000 - (int)(minecraft.theWorld.getTotalWorldTime() % 24000.00))/20;
+
+                String timeToShiftText = "Next Shift: " + EmptyHorizonsOverlay.CreateTimeString(timeToShift);
+
+                fontRendererObj.drawString(
+                    timeToShiftText,
                     xOffset + BLANK_GUI_EMPTY_OFFSET_WIDTH + BLANK_GUI_TEXT_OFFSET_WIDTH,
                     yOffset + BLANK_GUI_EMPTY_OFFSET_HEIGHT
                         + BLANK_GUI_TEXT_OFFSET_HEIGHT

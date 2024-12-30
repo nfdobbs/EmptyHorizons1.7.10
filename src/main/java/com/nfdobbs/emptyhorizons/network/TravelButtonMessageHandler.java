@@ -2,6 +2,7 @@ package com.nfdobbs.emptyhorizons.network;
 
 import static com.nfdobbs.emptyhorizons.util.OverworldTeleporter.TeleportToOverworld;
 
+import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimRegister;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldServer;
 
@@ -25,7 +26,7 @@ public class TravelButtonMessageHandler implements IMessageHandler<TravelButtonM
 
             EntityPlayerMP playerMP = ctx.getServerHandler().playerEntity;
             WorldServer worldServer = playerMP.mcServer.worldServerForDimension(0);
-            WorldServer emptyDimWorldServer = playerMP.mcServer.worldServerForDimension(-404);
+            WorldServer emptyDimWorldServer = playerMP.mcServer.worldServerForDimension(EmptyDimRegister.EMPTY_DIMENSION_ID);
 
             // Get Tile Entity
             TileEntityExcursionBlock tileEntityExcursionBlock = (TileEntityExcursionBlock) emptyDimWorldServer
@@ -65,9 +66,9 @@ public class TravelButtonMessageHandler implements IMessageHandler<TravelButtonM
 
                 if (tileEntityEvacuationBlock != null) {
                     tileEntityEvacuationBlock.InitializeTileEntity(
-                        (int) playerMP.posX,
+                        (int) Math.floor(playerMP.posX),
                         (int) playerMP.posY,
-                        (int) playerMP.posZ,
+                        (int) Math.floor(playerMP.posZ),
                         message.tileEntityCoordsX,
                         message.tileEntityCoordsY,
                         message.tileEntityCoordsZ,
@@ -77,6 +78,12 @@ public class TravelButtonMessageHandler implements IMessageHandler<TravelButtonM
                 }
 
                 tileEntityExcursionBlock.setTargetBlock(x, topBlockY + 1, z, playerMP.getDisplayName());
+
+                emptyDimWorldServer.markBlockForUpdate(
+                    tileEntityExcursionBlock.xCoord,
+                    tileEntityExcursionBlock.yCoord,
+                    tileEntityExcursionBlock.zCoord);
+
                 tileEntityExcursionBlock.decreaseAttemptsRemaining();
             }
 

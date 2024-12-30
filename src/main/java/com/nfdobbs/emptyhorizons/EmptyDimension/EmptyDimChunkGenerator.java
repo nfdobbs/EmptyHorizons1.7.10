@@ -20,6 +20,7 @@ public class EmptyDimChunkGenerator implements IChunkProvider {
         world = worldIn;
     }
 
+
     @Override
     public boolean chunkExists(int x, int z) {
         return true;

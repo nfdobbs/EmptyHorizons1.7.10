@@ -161,6 +161,11 @@ public class ExcursionBlock extends Block implements ITileEntityProvider {
                     }
 
                     tileEntityExcursionBlock.reset();
+
+                    world.markBlockForUpdate(
+                        tileEntityExcursionBlock.xCoord,
+                        tileEntityExcursionBlock.yCoord,
+                        tileEntityExcursionBlock.zCoord);
                 }
 
                 if (world.isRemote) {

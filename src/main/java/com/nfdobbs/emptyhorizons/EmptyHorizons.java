@@ -1,5 +1,6 @@
 package com.nfdobbs.emptyhorizons;
 
+import com.nfdobbs.emptyhorizons.commands.CommandEmptyHorizonsChapterMultipliers;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.apache.logging.log4j.LogManager;
@@ -28,8 +29,6 @@ public class EmptyHorizons {
 
     public static final String MODID = "emptyhorizons";
     public static final Logger LOG = LogManager.getLogger(MODID);
-
-    public static final int SAFE_DIMENSION = -404;
 
     @SidedProxy(
         clientSide = "com.nfdobbs.emptyhorizons.ClientProxy",
@@ -71,5 +70,6 @@ public class EmptyHorizons {
     public void serverStarting(FMLServerStartingEvent event) {
         proxy.serverStarting(event);
         event.registerServerCommand(new CommandEmptyHorizonsMoveToParty());
+        event.registerServerCommand(new CommandEmptyHorizonsChapterMultipliers());
     }
 }

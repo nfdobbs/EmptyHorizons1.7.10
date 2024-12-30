@@ -49,26 +49,8 @@ public class EmptyDimTeleporter extends Teleporter {
                 player.setPositionAndUpdate(x, y, z);
             } else {
 
-                double xCenter = 0;
-                double zCenter = 0;
-
-                if(x < 0)
-                {
-                    xCenter = -0.5;
-                }
-                else
-                {
-                    xCenter = 0.5;
-                }
-
-                if(z < 0)
-                {
-                    zCenter = -0.5;
-                }
-                else
-                {
-                    zCenter = 0.5;
-                }
+                double xCenter = 0.5;
+                double zCenter = 0.5;
 
                 playerMP.mcServer.getConfigurationManager()
                     .transferPlayerToDimension(
