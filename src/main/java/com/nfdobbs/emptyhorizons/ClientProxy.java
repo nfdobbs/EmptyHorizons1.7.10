@@ -13,7 +13,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 
 public class ClientProxy extends CommonProxy {
 
-    // Provides fog density and color NFDOBBS Test
+    // Provides fog density and color
     public static FogProvider fogProvider = new FogProvider();
 
     @Override
