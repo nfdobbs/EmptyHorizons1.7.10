@@ -7,7 +7,6 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
 public class Config {
-//Test
     // Quest Line Multipliers
     private final static String QUEST_LINE_MULTIPLIER_CATEGORY = "quest_line_multipliers";
     private final static Float MIN_FLOAT_VALUE = 0.25f;
