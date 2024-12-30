@@ -10,7 +10,7 @@ public class EmptyDimProvider extends WorldProvider {
     public static BiomeGenBase emptyBiome;
 
     public EmptyDimProvider() {
-        emptyBiome = new EmptyBiomeGen(176).setColor(40)
+        emptyBiome = new EmptyBiomeGen(191).setColor(40)
             .setBiomeName("Empty Biome");
     }
 
