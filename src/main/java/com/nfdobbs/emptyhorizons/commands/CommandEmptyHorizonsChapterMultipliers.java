@@ -1,15 +1,17 @@
 package com.nfdobbs.emptyhorizons.commands;
 
-import com.nfdobbs.emptyhorizons.Config;
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
-import java.util.List;
-import java.util.Map;
+import com.nfdobbs.emptyhorizons.Config;
 
 public class CommandEmptyHorizonsChapterMultipliers implements ICommand {
+
     @Override
     public String getCommandName() {
         return "eh_chapterMultipliers";
@@ -27,14 +29,18 @@ public class CommandEmptyHorizonsChapterMultipliers implements ICommand {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-        for(Map.Entry<String, Float> entry : Config.questLineMultipliers.entrySet())
-        {
+        for (Map.Entry<String, Float> entry : Config.questLineMultipliers.entrySet()) {
             String chapter = entry.getKey();
             Float multiplier = entry.getValue();
 
             String multiplierText = "[x" + multiplier + "]";
 
-            sender.addChatMessage(new ChatComponentText( EnumChatFormatting.YELLOW + String.format("%-" + 11 + "s", multiplierText) + " " + EnumChatFormatting.WHITE + chapter));
+            sender.addChatMessage(
+                new ChatComponentText(
+                    EnumChatFormatting.YELLOW + String.format("%-" + 11 + "s", multiplierText)
+                        + " "
+                        + EnumChatFormatting.WHITE
+                        + chapter));
         }
     }
 

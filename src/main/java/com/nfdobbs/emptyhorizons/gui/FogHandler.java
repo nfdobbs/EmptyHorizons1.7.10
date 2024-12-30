@@ -1,6 +1,5 @@
 package com.nfdobbs.emptyhorizons.gui;
 
-import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimRegister;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -8,7 +7,7 @@ import net.minecraftforge.client.event.EntityViewRenderEvent;
 import org.lwjgl.opengl.GL11;
 
 import com.nfdobbs.emptyhorizons.ClientProxy;
-import com.nfdobbs.emptyhorizons.EmptyHorizons;
+import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimRegister;
 import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
 import com.nfdobbs.emptyhorizons.worlddata.FogRecord;
 
@@ -31,7 +30,8 @@ public class FogHandler {
 
         ExtendedEmptyHorizonsPlayer player = ExtendedEmptyHorizonsPlayer.get(this.mc.thePlayer);
 
-        if (!player.isDoingChallenge() || event.entity.worldObj.provider.dimensionId == EmptyDimRegister.EMPTY_DIMENSION_ID) {
+        if (!player.isDoingChallenge()
+            || event.entity.worldObj.provider.dimensionId == EmptyDimRegister.EMPTY_DIMENSION_ID) {
             if (ClientProxy.fogProvider.showWelcomeMessage && Minecraft.getMinecraft().currentScreen == null) {
                 Minecraft.getMinecraft()
                     .displayGuiScreen(new WelcomeGUI());
@@ -63,7 +63,8 @@ public class FogHandler {
 
         ExtendedEmptyHorizonsPlayer player = ExtendedEmptyHorizonsPlayer.get(this.mc.thePlayer);
 
-        if (!player.isDoingChallenge() || event.entity.worldObj.provider.dimensionId == EmptyDimRegister.EMPTY_DIMENSION_ID
+        if (!player.isDoingChallenge()
+            || event.entity.worldObj.provider.dimensionId == EmptyDimRegister.EMPTY_DIMENSION_ID
             || IsTransparent(event)) {
             return;
         }

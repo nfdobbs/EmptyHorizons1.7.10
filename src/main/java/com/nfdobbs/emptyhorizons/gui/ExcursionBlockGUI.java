@@ -141,10 +141,8 @@ public class ExcursionBlockGUI extends GuiScreen {
                         + BLANK_GUI_TEXT_OFFSET_HEIGHT
                         + BLANK_GUI_TEXT_OFFSET_HEIGHT,
                     0);
-            }
-            else
-            {
-                int timeToShift = (24000 - (int)(minecraft.theWorld.getTotalWorldTime() % 24000.00))/20;
+            } else {
+                int timeToShift = (24000 - (int) (minecraft.theWorld.getTotalWorldTime() % 24000.00)) / 20;
 
                 String timeToShiftText = "Next Shift: " + EmptyHorizonsOverlay.CreateTimeString(timeToShift);
 

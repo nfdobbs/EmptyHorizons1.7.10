@@ -2,10 +2,10 @@ package com.nfdobbs.emptyhorizons.network;
 
 import static com.nfdobbs.emptyhorizons.util.OverworldTeleporter.TeleportToOverworld;
 
-import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimRegister;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldServer;
 
+import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimRegister;
 import com.nfdobbs.emptyhorizons.EmptyHorizons;
 import com.nfdobbs.emptyhorizons.blocks.EmptyHorizonBlocks;
 import com.nfdobbs.emptyhorizons.tileentities.TileEntityEvacuationBlock;
@@ -26,7 +26,8 @@ public class TravelButtonMessageHandler implements IMessageHandler<TravelButtonM
 
             EntityPlayerMP playerMP = ctx.getServerHandler().playerEntity;
             WorldServer worldServer = playerMP.mcServer.worldServerForDimension(0);
-            WorldServer emptyDimWorldServer = playerMP.mcServer.worldServerForDimension(EmptyDimRegister.EMPTY_DIMENSION_ID);
+            WorldServer emptyDimWorldServer = playerMP.mcServer
+                .worldServerForDimension(EmptyDimRegister.EMPTY_DIMENSION_ID);
 
             // Get Tile Entity
             TileEntityExcursionBlock tileEntityExcursionBlock = (TileEntityExcursionBlock) emptyDimWorldServer

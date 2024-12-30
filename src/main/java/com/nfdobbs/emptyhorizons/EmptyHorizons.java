@@ -1,6 +1,5 @@
 package com.nfdobbs.emptyhorizons;
 
-import com.nfdobbs.emptyhorizons.commands.CommandEmptyHorizonsChapterMultipliers;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.apache.logging.log4j.LogManager;
@@ -10,6 +9,7 @@ import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimRegister;
 import com.nfdobbs.emptyhorizons.EventHandlers.BetterQuestingEventHandler;
 import com.nfdobbs.emptyhorizons.EventHandlers.EventHandler;
 import com.nfdobbs.emptyhorizons.EventHandlers.FMLEventHandler;
+import com.nfdobbs.emptyhorizons.commands.CommandEmptyHorizonsChapterMultipliers;
 import com.nfdobbs.emptyhorizons.commands.CommandEmptyHorizonsMoveToParty;
 
 import cpw.mods.fml.common.FMLCommonHandler;

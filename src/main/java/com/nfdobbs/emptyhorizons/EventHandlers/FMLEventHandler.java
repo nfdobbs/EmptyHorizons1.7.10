@@ -10,7 +10,6 @@ import net.minecraft.util.DamageSource;
 
 import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimRegister;
 import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimTeleporter;
-import com.nfdobbs.emptyhorizons.EmptyHorizons;
 import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
