@@ -14,6 +14,7 @@ import com.nfdobbs.emptyhorizons.network.TravelButtonMessage;
 import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
 import com.nfdobbs.emptyhorizons.tileentities.TileEntityExcursionBlock;
 import com.nfdobbs.emptyhorizons.util.ExcursionCoords;
+import com.nfdobbs.emptyhorizons.util.TimeString;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -118,8 +119,7 @@ public class ExcursionBlockGUI extends GuiScreen {
             ExtendedEmptyHorizonsPlayer modPlayer = (ExtendedEmptyHorizonsPlayer) minecraft.thePlayer
                 .getExtendedProperties(ExtendedEmptyHorizonsPlayer.EXT_PROP_NAME);
 
-            String maxTime = "Max Expedition Time: "
-                + EmptyHorizonsOverlay.CreateTimeString(modPlayer.getMaxExpeditionTime());
+            String maxTime = "Max Expedition Time: " + TimeString.CreateTimeString(modPlayer.getMaxExpeditionTime());
 
             fontRendererObj.drawString(
                 maxTime,
@@ -144,7 +144,7 @@ public class ExcursionBlockGUI extends GuiScreen {
             } else {
                 int timeToShift = (24000 - (int) (minecraft.theWorld.getTotalWorldTime() % 24000.00)) / 20;
 
-                String timeToShiftText = "Next Shift: " + EmptyHorizonsOverlay.CreateTimeString(timeToShift);
+                String timeToShiftText = "Next Shift: " + TimeString.CreateTimeString(timeToShift);
 
                 fontRendererObj.drawString(
                     timeToShiftText,

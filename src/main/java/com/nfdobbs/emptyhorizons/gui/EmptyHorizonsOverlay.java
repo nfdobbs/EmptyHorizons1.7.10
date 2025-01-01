@@ -6,6 +6,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
+import com.nfdobbs.emptyhorizons.util.TimeString;
 
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -44,8 +45,8 @@ public class EmptyHorizonsOverlay extends Gui {
             expeditionTime = 1;
         }
 
-        String expeditionTimeString = CreateTimeString(expeditionTime);
-        String maxExpeditionTimeString = "Max Expedition Time: " + CreateTimeString(maxExpeditionTime);
+        String expeditionTimeString = TimeString.CreateTimeString(expeditionTime);
+        String maxExpeditionTimeString = "Max Expedition Time: " + TimeString.CreateTimeString(maxExpeditionTime);
 
         EnumChatFormatting color = EnumChatFormatting.WHITE;
 
@@ -60,25 +61,5 @@ public class EmptyHorizonsOverlay extends Gui {
         drawString(mc.fontRenderer, "Lethal Exposure: " + expeditionTimeString, 2, 2, 0xFFFFFF);
 
         // drawString(mc.fontRenderer, maxExpeditionTimeString, 2, 15, 0xFF5555);
-    }
-
-    @SideOnly(Side.CLIENT)
-    public static String CreateTimeString(int timeInSeconds) {
-        int minutes = timeInSeconds / 60;
-        int seconds = timeInSeconds % 60;
-
-        int hours = minutes / 60;
-        minutes = minutes % 60;
-
-        String outputTime = "";
-        if (hours > 0) {
-            outputTime = String.format("%d:%02d:%02d", hours, minutes, seconds);
-        } else if (minutes > 0) {
-            outputTime = String.format("%d:%02d", minutes, seconds);
-        } else {
-            outputTime = String.format("%d", seconds);
-        }
-
-        return outputTime;
     }
 }

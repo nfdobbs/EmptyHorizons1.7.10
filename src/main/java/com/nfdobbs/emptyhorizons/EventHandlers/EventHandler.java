@@ -39,12 +39,21 @@ public class EventHandler {
             EntityPlayerMP player = (EntityPlayerMP) event.entityPlayer;
 
             if (player.func_147099_x()
-                .hasAchievementUnlocked(event.achievement)) {
-                return;
-            }
+                .canUnlockAchievement(event.achievement)) {
+                if (player.func_147099_x()
+                    .hasAchievementUnlocked(event.achievement)) {
+                    return;
+                }
 
-            if (modPlayer.isDoingChallenge()) {
-                modPlayer.giveAchievementReward();
+                if (modPlayer.isDoingChallenge() && event.achievement.isAchievement()) {
+                    modPlayer.giveAchievementReward();
+
+                    EmptyHorizons.LOG.info(
+                        "Giving achievement reward to " + player.getDisplayName()
+                            + " for achievement: '"
+                            + event.achievement.statId
+                            + "'");
+                }
             }
         }
     }

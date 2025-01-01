@@ -11,6 +11,7 @@ import com.nfdobbs.emptyhorizons.EventHandlers.EventHandler;
 import com.nfdobbs.emptyhorizons.EventHandlers.FMLEventHandler;
 import com.nfdobbs.emptyhorizons.commands.CommandEmptyHorizonsChapterMultipliers;
 import com.nfdobbs.emptyhorizons.commands.CommandEmptyHorizonsMoveToParty;
+import com.nfdobbs.emptyhorizons.commands.CommandEmptyHorizonsRecalcTime;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -71,5 +72,6 @@ public class EmptyHorizons {
         proxy.serverStarting(event);
         event.registerServerCommand(new CommandEmptyHorizonsMoveToParty());
         event.registerServerCommand(new CommandEmptyHorizonsChapterMultipliers());
+        event.registerServerCommand(new CommandEmptyHorizonsRecalcTime());
     }
 }

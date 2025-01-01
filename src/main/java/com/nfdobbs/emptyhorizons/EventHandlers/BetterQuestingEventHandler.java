@@ -75,7 +75,7 @@ public class BetterQuestingEventHandler {
         }
     }
 
-    private List<String> FindQuestLineNames(UUID questUUID) {
+    public List<String> FindQuestLineNames(UUID questUUID) {
         List<Map.Entry<UUID, IQuestLine>> questLines = questLineDB.getOrderedEntries();
 
         List<String> questLineNames = new ArrayList<>();

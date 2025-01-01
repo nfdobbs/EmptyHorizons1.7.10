@@ -233,7 +233,7 @@ public class CommandEmptyHorizonsMoveToParty implements ICommand {
         return null;
     }
 
-    private EntityPlayer getPlayer(String playerName) {
+    public static EntityPlayer getPlayer(String playerName) {
         ServerConfigurationManager serverConfigManager = MinecraftServer.getServer()
             .getConfigurationManager();
         List<EntityPlayerMP> playerList = serverConfigManager.playerEntityList;

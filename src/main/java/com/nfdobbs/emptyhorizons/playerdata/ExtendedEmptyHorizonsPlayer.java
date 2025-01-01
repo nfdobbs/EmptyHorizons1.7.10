@@ -31,10 +31,11 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
     private final EntityPlayer player;
 
     public final static int CURRENT_EXPEDITION_TIME_WATCHER = 24;
-    private int maxExpeditionTime = Config.startingExposureTime;
-    private int mainQuestRewardTime = Config.baseMainQuestReward;
-    private int achievementRewardTime = Config.achievementReward;
-    private int optionalQuestRewardTime = Config.baseOptionalQuestReward;
+    public final static int startingExposureTime = Config.startingExposureTime;
+    private int maxExpeditionTime = startingExposureTime;
+    private final static int mainQuestRewardTime = Config.baseMainQuestReward;
+    public final static int achievementRewardTime = Config.achievementReward;
+    private final static int optionalQuestRewardTime = Config.baseOptionalQuestReward;
     private boolean doingChallenge = false;
     private boolean hasChosenPlaystyle = false;
     private boolean hasUsedFreePartyTP = false;
@@ -162,18 +163,8 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
     }
 
     public void giveQuestReward(QuestInstance quest, List<String> questLineNames) {
-        int rewardTime = 0;
 
-        int questBaseTime = 0;
-
-        if (quest.getProperty(NativeProps.MAIN)) {
-            questBaseTime = mainQuestRewardTime;
-        } else {
-            questBaseTime = optionalQuestRewardTime;
-        }
-
-        float questMultiplier = getQuestMultiplier(questLineNames);
-        rewardTime = Math.round(questBaseTime * questMultiplier);
+        int rewardTime = getQuestRewardTime(quest, questLineNames);
 
         if (isDoingChallenge()) {
             EntityPlayerMP playerMP = (EntityPlayerMP) player;
@@ -184,11 +175,31 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
         setMaxExpeditionTime(maxExpeditionTime + rewardTime);
     }
 
-    public void giveAchievementReward() {
-        setMaxExpeditionTime(maxExpeditionTime + achievementRewardTime);
+    public static int getQuestRewardTime(QuestInstance quest, List<String> questLineNames) {
+        int questBaseTime = 0;
+
+        if (quest.getProperty(NativeProps.MAIN)) {
+            questBaseTime = mainQuestRewardTime;
+        } else {
+            questBaseTime = optionalQuestRewardTime;
+        }
+
+        float questMultiplier = getQuestMultiplier(questLineNames);
+        return Math.round(questBaseTime * questMultiplier);
     }
 
-    private float getQuestMultiplier(List<String> questLineNames) {
+    public void giveAchievementReward() {
+        setMaxExpeditionTime(maxExpeditionTime + achievementRewardTime);
+
+        if (isDoingChallenge()) {
+            EntityPlayerMP playerMP = (EntityPlayerMP) player;
+            playerMP.addChatMessage(
+                new ChatComponentText(
+                    EnumChatFormatting.GREEN + "Achievement Complete! " + achievementRewardTime + " seconds earned."));
+        }
+    }
+
+    private static float getQuestMultiplier(List<String> questLineNames) {
         float questMultiplier = 1.0f;
 
         for (String questLineName : questLineNames) {
@@ -204,13 +215,6 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
         }
 
         return questMultiplier;
-    }
-
-    public void debugMessage() {
-        int expeditionTime = getExpeditionTime();
-
-        System.out.println("Expedition time: " + expeditionTime + " Max Expedition time: " + maxExpeditionTime);
-        System.out.println("Challenge: " + doingChallenge);
     }
 
     public void sync() {
