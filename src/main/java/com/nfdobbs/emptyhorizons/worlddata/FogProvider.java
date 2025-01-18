@@ -50,7 +50,14 @@ public class FogProvider {
             fogColorB = .7094888F;
         } else {
             long worldSeed = world.getSeed();
-            Random rd = new Random(worldSeed + dimensionID);
+
+            int hash = Long.hashCode(worldSeed + dimensionID);
+
+            Random rd = new Random(hash);
+
+            rd.nextFloat();
+            rd.nextFloat();
+            rd.nextFloat();
 
             fogDensity = MIN_FOG_DENSITY + rd.nextFloat() * (MAX_FOG_DENSITY - MIN_FOG_DENSITY);
             fogColorR = rd.nextFloat();
