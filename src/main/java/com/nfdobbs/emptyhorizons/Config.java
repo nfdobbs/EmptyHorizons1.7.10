@@ -113,6 +113,8 @@ public class Config {
         var questLineMultipliersConfig = configuration.getCategory(QUEST_LINE_MULTIPLIER_CATEGORY);
 
         if (questLineMultipliers.isEmpty()) {
+            questLineMultipliersConfig
+                .put("Tier 0 - Stone Age", new Property("Tier 0 - Stone Age", "0.5", Property.Type.DOUBLE));
             questLineMultipliersConfig.put("Tier 1 - LV", new Property("Tier 1 - LV", "1.5", Property.Type.DOUBLE));
             questLineMultipliersConfig.put("Tier 2 - MV", new Property("Tier 2 - MV", "2", Property.Type.DOUBLE));
             questLineMultipliersConfig.put("Tier 3 - HV", new Property("Tier 3 - HV", "3", Property.Type.DOUBLE));

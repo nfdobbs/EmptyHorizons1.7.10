@@ -200,7 +200,7 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
     }
 
     private static float getQuestMultiplier(List<String> questLineNames) {
-        float questMultiplier = 1.0f;
+        float questMultiplier = 0.0f;
 
         for (String questLineName : questLineNames) {
             float multiplier = 0.0f;
@@ -212,6 +212,11 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
                     questMultiplier = multiplier;
                 }
             }
+        }
+
+        if(questMultiplier == 0.0f)
+        {
+            questMultiplier = 1.0f;
         }
 
         return questMultiplier;
