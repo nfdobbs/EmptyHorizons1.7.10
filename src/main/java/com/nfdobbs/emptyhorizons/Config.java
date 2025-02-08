@@ -34,7 +34,7 @@ public class Config {
     private final static String EXCURSION_ATTEMPTS_COMMENT = "Number of attempts to allow per location.";
 
     // Base Main Quest Rewards
-    public static int baseMainQuestReward = 10;
+    public static int baseMainQuestReward = 9;
     private final static int MIN_BASE_MAIN_QUEST_REWARD = 0;
     private final static int MAX_BASE_MAIN_QUEST_REWARD = 600;
     private final static String BASE_MAIN_QUEST_REWARD_COMMENT = "Base time to give before multipliers for main quests.";
@@ -115,18 +115,20 @@ public class Config {
         if (questLineMultipliers.isEmpty()) {
             questLineMultipliersConfig
                 .put("Tier 0 - Stone Age", new Property("Tier 0 - Stone Age", "0.5", Property.Type.DOUBLE));
-            questLineMultipliersConfig.put("Tier 1 - LV", new Property("Tier 1 - LV", "1.5", Property.Type.DOUBLE));
-            questLineMultipliersConfig.put("Tier 2 - MV", new Property("Tier 2 - MV", "2", Property.Type.DOUBLE));
-            questLineMultipliersConfig.put("Tier 3 - HV", new Property("Tier 3 - HV", "3", Property.Type.DOUBLE));
-            questLineMultipliersConfig.put("Tier 4 - EV", new Property("Tier 4 - EV", "4", Property.Type.DOUBLE));
-            questLineMultipliersConfig.put("Tier 5 - IV", new Property("Tier 5 - IV", "5", Property.Type.DOUBLE));
-            questLineMultipliersConfig.put("Tier 6 - LuV", new Property("Tier 6 - LuV", "6", Property.Type.DOUBLE));
-            questLineMultipliersConfig.put("Tier 7 - ZPM", new Property("Tier 7 - ZPM", "7", Property.Type.DOUBLE));
-            questLineMultipliersConfig.put("Tier 8 - UV", new Property("Tier 8 - UV", "8", Property.Type.DOUBLE));
-            questLineMultipliersConfig.put("Tier 9 - UHV", new Property("Tier 9 - UHV", "14", Property.Type.DOUBLE));
-            questLineMultipliersConfig.put("Tier 10 - UEV", new Property("Tier 10 - UEV", "15", Property.Type.DOUBLE));
-            questLineMultipliersConfig.put("Tier 11 - UIV", new Property("Tier 11 - UIV", "16", Property.Type.DOUBLE));
-            questLineMultipliersConfig.put("Tier 12 - UMV", new Property("Tier 12 - UMV", "17", Property.Type.DOUBLE));
+            questLineMultipliersConfig
+                .put("Tier 0.5 - Steam", new Property("Tier 0.5 - Steam", "0.75", Property.Type.DOUBLE));
+            questLineMultipliersConfig.put("Tier 1 - LV", new Property("Tier 1 - LV", "1", Property.Type.DOUBLE));
+            questLineMultipliersConfig.put("Tier 2 - MV", new Property("Tier 2 - MV", "1.5", Property.Type.DOUBLE));
+            questLineMultipliersConfig.put("Tier 3 - HV", new Property("Tier 3 - HV", "2", Property.Type.DOUBLE));
+            questLineMultipliersConfig.put("Tier 4 - EV", new Property("Tier 4 - EV", "3", Property.Type.DOUBLE));
+            questLineMultipliersConfig.put("Tier 5 - IV", new Property("Tier 5 - IV", "4", Property.Type.DOUBLE));
+            questLineMultipliersConfig.put("Tier 6 - LuV", new Property("Tier 6 - LuV", "5", Property.Type.DOUBLE));
+            questLineMultipliersConfig.put("Tier 7 - ZPM", new Property("Tier 7 - ZPM", "6", Property.Type.DOUBLE));
+            questLineMultipliersConfig.put("Tier 8 - UV", new Property("Tier 8 - UV", "7", Property.Type.DOUBLE));
+            questLineMultipliersConfig.put("Tier 9 - UHV", new Property("Tier 9 - UHV", "13", Property.Type.DOUBLE));
+            questLineMultipliersConfig.put("Tier 10 - UEV", new Property("Tier 10 - UEV", "14", Property.Type.DOUBLE));
+            questLineMultipliersConfig.put("Tier 11 - UIV", new Property("Tier 11 - UIV", "15", Property.Type.DOUBLE));
+            questLineMultipliersConfig.put("Tier 12 - UMV", new Property("Tier 12 - UMV", "16", Property.Type.DOUBLE));
             questLineMultipliersConfig.put("Endgame Goals", new Property("Endgame Goals", "200", Property.Type.DOUBLE));
             questLineMultipliersConfig.put(
                 "Fishing, Farming, Cooking",
@@ -165,18 +167,18 @@ public class Config {
                 "Hardcore End(er) Expansion",
                 new Property("Hardcore End(er) Expansion", "4.5", Property.Type.DOUBLE));
             questLineMultipliersConfig
-                .put("Novice Thaumaturgy", new Property("Novice Thaumaturgy", "2", Property.Type.DOUBLE));
+                .put("Novice Thaumaturgy", new Property("Novice Thaumaturgy", "1.5", Property.Type.DOUBLE));
             questLineMultipliersConfig
-                .put("Adept Thaumaturgy", new Property("Adept Thaumaturgy", "4", Property.Type.DOUBLE));
+                .put("Adept Thaumaturgy", new Property("Adept Thaumaturgy", "3", Property.Type.DOUBLE));
             questLineMultipliersConfig
-                .put("Kaaami, Haaaami, ... HA!", new Property("Kaaami, Haaaami, ... HA!", "5.5", Property.Type.DOUBLE));
+                .put("Kaaami, Haaaami, ... HA!", new Property("Kaaami, Haaaami, ... HA!", "5", Property.Type.DOUBLE));
             questLineMultipliersConfig
                 .put("Focus on Wand Foci & EMT", new Property("Focus on Wand Foci & EMT", "2", Property.Type.DOUBLE));
             questLineMultipliersConfig.put("Flower Power", new Property("Flower Power", "3", Property.Type.DOUBLE));
             questLineMultipliersConfig
                 .put("Look to the Edges", new Property("Look to the Edges", "2.5", Property.Type.DOUBLE));
             questLineMultipliersConfig
-                .put("Paying the Highest Price", new Property("Paying the Highest Price", "4", Property.Type.DOUBLE));
+                .put("Paying the Highest Price", new Property("Paying the Highest Price", "3.5", Property.Type.DOUBLE));
         }
 
         // Get all the multipliers

@@ -214,8 +214,7 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
             }
         }
 
-        if(questMultiplier == 0.0f)
-        {
+        if (questMultiplier == 0.0f) {
             questMultiplier = 1.0f;
         }
 
