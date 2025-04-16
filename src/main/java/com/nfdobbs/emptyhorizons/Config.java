@@ -6,6 +6,8 @@ import java.util.HashMap;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
+import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimRegister;
+
 public class Config {
 
     // Quest Line Multipliers
@@ -14,6 +16,13 @@ public class Config {
     private final static Float MAX_FLOAT_VALUE = 100f;
     private final static Float DEFAULT_FLOAT_VALUE = 1f;
     private final static String QUEST_LINE_MULTIPLIER_COMMENT = "BQ QuestLine names here will have their quest time reward multiplied by the given float value (0.25f - 100f).";
+
+    // Safe Dimensions
+    private final static String SAFE_DIMENSIONS_CATEGORY = "safe_dimensions";
+    private final static int MIN_DIM_VALUE = -100000;
+    private final static int MAX_DIM_VALUE = 100000;
+    private final static int DEFAULT_DIM_VALUE = EmptyDimRegister.EMPTY_DIMENSION_ID;
+    private final static String SAFE_DIMENSIONS_COMMENT = "Dimensions IDs here will be safe from building exposure.";
 
     // Challenge Spawn Separation
     public static int challengeSpawnSeparation = 1000;
@@ -54,6 +63,8 @@ public class Config {
     public static String greeting = "Welcome to suffering";
 
     public static HashMap<String, Float> questLineMultipliers = new HashMap<>();
+
+    public static HashMap<String, Integer> safeDimensions = new HashMap<String, Integer>();
 
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
@@ -107,6 +118,22 @@ public class Config {
             MIN_ACHIEVEMENT_REWARD,
             MAX_ACHIEVEMENT_REWARD,
             BASE_ACHIEVEMENT_REWARD_COMMENT);
+
+        configuration = configuration.setCategoryComment(SAFE_DIMENSIONS_CATEGORY, SAFE_DIMENSIONS_COMMENT);
+
+        var safeDimensionsConfig = configuration.getCategory(SAFE_DIMENSIONS_CATEGORY);
+
+        if (safeDimensionsConfig.isEmpty()) {
+            safeDimensionsConfig.put("Empty Dimension", new Property("Empty Dimension", "404", Property.Type.INTEGER));
+        }
+
+        // Get all the multipliers
+        for (var entry : safeDimensionsConfig.entrySet()) {
+            Integer safeDim = configuration
+                .getInt(entry.getKey(), SAFE_DIMENSIONS_CATEGORY, DEFAULT_DIM_VALUE, MIN_DIM_VALUE, MAX_DIM_VALUE, "");
+
+            safeDimensions.put(entry.getKey(), safeDim);
+        }
 
         configuration = configuration.setCategoryComment(QUEST_LINE_MULTIPLIER_CATEGORY, QUEST_LINE_MULTIPLIER_COMMENT);
 

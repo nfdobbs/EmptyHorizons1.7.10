@@ -3,7 +3,11 @@ package com.nfdobbs.emptyhorizons.commands;
 import static com.nfdobbs.emptyhorizons.commands.CommandEmptyHorizonsMoveToParty.getPlayer;
 import static com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer.getQuestRewardTime;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -20,7 +24,11 @@ import com.nfdobbs.emptyhorizons.util.TimeString;
 import betterquesting.api.api.QuestingAPI;
 import betterquesting.api.properties.NativeProps;
 import betterquesting.api.questing.IQuestLine;
-import betterquesting.questing.*;
+import betterquesting.questing.QuestDatabase;
+import betterquesting.questing.QuestInstance;
+import betterquesting.questing.QuestLine;
+import betterquesting.questing.QuestLineDatabase;
+import betterquesting.questing.QuestLineEntry;
 import cpw.mods.fml.common.FMLCommonHandler;
 
 public class CommandEmptyHorizonsRecalcTime implements ICommand {

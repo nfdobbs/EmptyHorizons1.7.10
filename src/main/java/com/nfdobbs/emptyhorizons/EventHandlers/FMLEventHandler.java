@@ -8,6 +8,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
 
+import com.nfdobbs.emptyhorizons.Config;
 import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimRegister;
 import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimTeleporter;
 import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
@@ -62,7 +63,8 @@ public class FMLEventHandler {
                         int maxExpTime = ehPlayer.getMaxExpeditionTime();
                         int currentExpTime = ehPlayer.getExpeditionTime();
 
-                        if (player.dimension != EmptyDimRegister.EMPTY_DIMENSION_ID) {
+                        if (player.dimension != EmptyDimRegister.EMPTY_DIMENSION_ID
+                            && !Config.safeDimensions.containsValue(player.dimension)) {
                             ehPlayer.setExpeditionTime(currentExpTime - 1);
                         } else if (maxExpTime > currentExpTime) {
                             ehPlayer.setExpeditionTime(currentExpTime + 1);

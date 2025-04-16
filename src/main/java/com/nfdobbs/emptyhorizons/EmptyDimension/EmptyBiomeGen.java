@@ -12,4 +12,5 @@ public class EmptyBiomeGen extends BiomeGenBase {
     public BiomeGenBase.TempCategory getTempCategory() {
         return TempCategory.COLD;
     }
+
 }

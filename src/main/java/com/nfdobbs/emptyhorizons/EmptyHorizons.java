@@ -41,7 +41,7 @@ public class EmptyHorizons {
     // GameRegistry." (Remove if not needed)
     public void preInit(FMLPreInitializationEvent event) {
         EmptyDimRegister.registerDimensions();
-
+        EmptyDimRegister.registerBiomes();
         proxy.preInit(event);
     }
 
@@ -49,7 +49,6 @@ public class EmptyHorizons {
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)
     public void init(FMLInitializationEvent event) {
         proxy.init(event);
-
         MinecraftForge.EVENT_BUS.register(new EventHandler());
 
         MinecraftForge.EVENT_BUS.register(new BetterQuestingEventHandler());

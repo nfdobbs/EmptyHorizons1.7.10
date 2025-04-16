@@ -1,5 +1,7 @@
 package com.nfdobbs.emptyhorizons.EmptyDimension;
 
+import static com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimRegister.emptyBiome;
+
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManagerHell;
@@ -7,12 +9,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 
 public class EmptyDimProvider extends WorldProvider {
 
-    public static BiomeGenBase emptyBiome;
-
-    public EmptyDimProvider() {
-        emptyBiome = new EmptyBiomeGen(191).setColor(40)
-            .setBiomeName("Empty Biome");
-    }
+    public EmptyDimProvider() {}
 
     @Override
     public String getDimensionName() {

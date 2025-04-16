@@ -6,7 +6,16 @@ import java.util.Map;
 import net.minecraft.nbt.NBTTagCompound;
 
 import com.nfdobbs.emptyhorizons.blocks.EmptyHorizonBlocks;
-import com.nfdobbs.emptyhorizons.network.*;
+import com.nfdobbs.emptyhorizons.network.FogDataMessage;
+import com.nfdobbs.emptyhorizons.network.FogDataMessageHandler;
+import com.nfdobbs.emptyhorizons.network.PlaystyleMessage;
+import com.nfdobbs.emptyhorizons.network.PlaystyleMessageHandler;
+import com.nfdobbs.emptyhorizons.network.ShowWelcomeGuiMessage;
+import com.nfdobbs.emptyhorizons.network.ShowWelcomeGuiMessageHandler;
+import com.nfdobbs.emptyhorizons.network.SyncMessage;
+import com.nfdobbs.emptyhorizons.network.SyncMessageHandler;
+import com.nfdobbs.emptyhorizons.network.TravelButtonMessage;
+import com.nfdobbs.emptyhorizons.network.TravelButtonMessageHandler;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;

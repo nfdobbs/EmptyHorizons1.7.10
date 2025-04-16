@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 
+import com.nfdobbs.emptyhorizons.gui.DebugHandler;
 import com.nfdobbs.emptyhorizons.gui.EmptyHorizonsOverlay;
 import com.nfdobbs.emptyhorizons.gui.ExcursionBlockGUI;
 import com.nfdobbs.emptyhorizons.gui.FogHandler;
@@ -20,6 +21,7 @@ public class ClientProxy extends CommonProxy {
     public void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new EmptyHorizonsOverlay(Minecraft.getMinecraft()));
         MinecraftForge.EVENT_BUS.register(new FogHandler(Minecraft.getMinecraft()));
+        MinecraftForge.EVENT_BUS.register(new DebugHandler());
         super.init(event);
     }
 
