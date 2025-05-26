@@ -32,6 +32,10 @@ public class PlaystyleMessageHandler implements IMessageHandler<PlaystyleMessage
             ExtendedEmptyHorizonsPlayer modPlayer = (ExtendedEmptyHorizonsPlayer) playerMP
                 .getExtendedProperties(ExtendedEmptyHorizonsPlayer.EXT_PROP_NAME);
 
+            if (modPlayer.hasSetHasChosenPlaystyle()) {
+                return null;
+            }
+
             modPlayer.setHasChosenPlaystyle(true);
             modPlayer.setDoingChallenge(message.willDoChallenge);
 
