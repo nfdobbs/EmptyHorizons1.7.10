@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
 import com.nfdobbs.emptyhorizons.util.BetterQuestingHelpers;
 import com.nfdobbs.emptyhorizons.util.TimeString;
 
@@ -46,6 +47,12 @@ public class MixinGuiQuest {
 
     @Inject(method = "initPanel", at = @At(value = "TAIL"), remap = false)
     private void addTimeBonus(CallbackInfo ci, @Local(ordinal = 0) CanvasTextured cvBackground) {
+
+        ExtendedEmptyHorizonsPlayer player = ExtendedEmptyHorizonsPlayer.get(Minecraft.getMinecraft().thePlayer);
+
+        if (!player.isDoingChallenge()) {
+            return;
+        }
 
         List<String> questLineNames = BetterQuestingHelpers.FindQuestLineNames(questID, questLineDB);
 
