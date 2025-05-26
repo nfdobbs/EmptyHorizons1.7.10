@@ -2,7 +2,6 @@ package com.nfdobbs.emptyhorizons.mixins.early;
 
 import static com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer.getQuestRewardTime;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -12,11 +11,14 @@ import net.minecraft.client.Minecraft;
 import org.lwjgl.util.vector.Vector4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
+import com.nfdobbs.emptyhorizons.util.BetterQuestingHelpers;
 import com.nfdobbs.emptyhorizons.util.TimeString;
 
 import betterquesting.api.api.QuestingAPI;
@@ -38,6 +40,7 @@ class MixinGuiQuestLines {
     private final QuestLineDatabase questLineDB = QuestLineDatabase.INSTANCE;
 
     private PanelTextBox timeProgressBox;
+    private CanvasTextured QuestCvBackground;
 
     @Shadow(remap = false)
     private IQuestLine selectedLine;
@@ -47,6 +50,14 @@ class MixinGuiQuestLines {
 
     @Inject(method = "initPanel", at = @At(value = "TAIL"), remap = false)
     private void addPanel(CallbackInfo ci, @Local(ordinal = 0) CanvasTextured cvBackground) {
+
+        ExtendedEmptyHorizonsPlayer player = ExtendedEmptyHorizonsPlayer.get(Minecraft.getMinecraft().thePlayer);
+
+        if (!player.isDoingChallenge()) {
+            return;
+        }
+
+        QuestCvBackground = cvBackground;
 
         // Need this for first quest open padding
         String timeProgress = GetQuestlineTimeProgress();
@@ -66,22 +77,37 @@ class MixinGuiQuestLines {
         timeProgressBox.setColor(PresetColor.TEXT_HEADER.getColor());
 
         cvBackground.addPanel(timeProgressBox);
-
-        return;
     }
 
     @Inject(method = "openQuestLine", at = @At(value = "TAIL"), remap = false)
     private void openQuestline(CallbackInfo ci) {
+        ExtendedEmptyHorizonsPlayer player = ExtendedEmptyHorizonsPlayer.get(Minecraft.getMinecraft().thePlayer);
+
+        if (!player.isDoingChallenge()) {
+            return;
+        }
+
         if (selectedLine == null) {
             return;
         }
 
         String timeProgress = GetQuestlineTimeProgress();
 
-        timeProgressBox.setText(timeProgress);
+        QuestCvBackground.removePanel(timeProgressBox);
 
+        final int BORDER_PADDING = 9;
+        int timeProgressLength = (Minecraft.getMinecraft().fontRenderer.getStringWidth(timeProgress) + BORDER_PADDING)
+            * -1;
+
+        timeProgressBox = new PanelTextBox(
+            new GuiTransform(new Vector4f(1F, 0F, 1F, 0F), new GuiPadding(timeProgressLength, 12, 0, -24), 0),
+            timeProgress);
+        timeProgressBox.setColor(PresetColor.TEXT_HEADER.getColor());
+
+        QuestCvBackground.addPanel(timeProgressBox);
     }
 
+    @Unique
     private String GetQuestlineTimeProgress() {
 
         if (selectedLine == null) {
@@ -95,7 +121,8 @@ class MixinGuiQuestLines {
             QuestInstance currentQuest = (QuestInstance) questDB.get(questMapping.getKey());
 
             if (currentQuest != null && currentQuest.getProperty(NativeProps.REPEAT_TIME) < 0) {
-                List<String> questLineNames = FindQuestLineNames(questMapping.getKey());
+                List<String> questLineNames = BetterQuestingHelpers
+                    .FindQuestLineNames(questMapping.getKey(), questLineDB);
 
                 UUID uuid = QuestingAPI.getQuestingUUID(Minecraft.getMinecraft().thePlayer);
 
@@ -106,7 +133,6 @@ class MixinGuiQuestLines {
                     completedTime += rewardTime;
                 }
             }
-            int i = 1 + 2;
         }
 
         String timeProgress = "[" + TimeString.CreatePrettyTimeString(completedTime)
@@ -114,25 +140,6 @@ class MixinGuiQuestLines {
             + TimeString.CreatePrettyTimeString(totalTime)
             + "]";
 
-        int minecraftWidth = Minecraft.getMinecraft().displayWidth;
-
         return timeProgress;
-    }
-
-    public List<String> FindQuestLineNames(UUID questUUID) {
-        List<Map.Entry<UUID, IQuestLine>> questLines = questLineDB.getOrderedEntries();
-
-        List<String> questLineNames = new ArrayList<>();
-
-        for (Map.Entry<UUID, IQuestLine> entry : questLines) {
-            QuestLine currentQuestline = (QuestLine) entry.getValue();
-            QuestLineEntry foundQuest = (QuestLineEntry) currentQuestline.get(questUUID);
-
-            if (foundQuest != null) {
-                questLineNames.add(currentQuestline.getProperty(NativeProps.NAME));
-            }
-        }
-
-        return questLineNames;
     }
 }
