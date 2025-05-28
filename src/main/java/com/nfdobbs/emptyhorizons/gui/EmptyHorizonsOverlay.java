@@ -58,7 +58,14 @@ public class EmptyHorizonsOverlay extends Gui {
 
         expeditionTimeString = color + expeditionTimeString;
 
-        drawString(mc.fontRenderer, "Lethal Exposure: " + expeditionTimeString, 2, 2, 0xFFFFFF);
+        int currentDim = this.mc.thePlayer.dimension;
+
+        drawString(
+            mc.fontRenderer,
+            "Lethal Exposure: " + expeditionTimeString + " (" + currentDim + ")",
+            2,
+            2,
+            0xFFFFFF);
 
         // drawString(mc.fontRenderer, maxExpeditionTimeString, 2, 15, 0xFF5555);
     }

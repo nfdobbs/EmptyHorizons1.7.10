@@ -46,6 +46,23 @@ public class FMLEventHandler {
     }
 
     @SubscribeEvent
+    public void onChangeDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+
+        boolean fromIsSafe = event.fromDim == EmptyDimRegister.EMPTY_DIMENSION_ID
+            || Config.safeDimensions.containsValue(event.fromDim);
+
+        boolean toIsSafe = event.toDim == EmptyDimRegister.EMPTY_DIMENSION_ID
+            || Config.safeDimensions.containsValue(event.toDim);
+
+        // If from is safe and to is not we need to divide
+
+        // If too is safe and from is not we need to multiply
+
+        // If both we need to do math
+
+    }
+
+    @SubscribeEvent
     public void onServerTick(TickEvent.ServerTickEvent event) {
         List<EntityPlayerMP> onlinePlayers = MinecraftServer.getServer()
             .getConfigurationManager().playerEntityList;
@@ -63,8 +80,7 @@ public class FMLEventHandler {
                         int maxExpTime = ehPlayer.getMaxExpeditionTime();
                         int currentExpTime = ehPlayer.getExpeditionTime();
 
-                        if (player.dimension != EmptyDimRegister.EMPTY_DIMENSION_ID
-                            && !Config.safeDimensions.containsValue(player.dimension)) {
+                        if (!ExtendedEmptyHorizonsPlayer.IsSafe(ehPlayer, player.worldObj.provider)) {
                             ehPlayer.setExpeditionTime(currentExpTime - 1);
                         } else if (maxExpTime > currentExpTime) {
                             ehPlayer.setExpeditionTime(currentExpTime + 1);

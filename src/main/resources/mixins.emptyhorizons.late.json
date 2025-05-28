@@ -4,10 +4,6 @@
   "package": "com.nfdobbs.emptyhorizons.mixins.late",
   "refmap": "mixins.emptyhorizons.refmap.json",
   "target": "@env(DEFAULT)",
-  "compatibilityLevel": "JAVA_8",
-  "client": [
-    "MixinGuiQuestLines",
-    "MixinClientProxy"
-  ]
+  "compatibilityLevel": "JAVA_8"
 }
 

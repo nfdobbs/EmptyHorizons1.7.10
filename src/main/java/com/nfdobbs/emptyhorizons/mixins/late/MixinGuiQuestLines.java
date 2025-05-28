@@ -1,4 +1,4 @@
-package com.nfdobbs.emptyhorizons.mixins.early;
+package com.nfdobbs.emptyhorizons.mixins.late;
 
 import static com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer.getQuestRewardTime;
 
@@ -31,8 +31,13 @@ import betterquesting.api2.client.gui.panels.CanvasTextured;
 import betterquesting.api2.client.gui.panels.content.PanelTextBox;
 import betterquesting.api2.client.gui.themes.presets.PresetColor;
 import betterquesting.client.gui2.GuiQuestLines;
-import betterquesting.questing.*;
+import betterquesting.questing.QuestDatabase;
+import betterquesting.questing.QuestInstance;
+import betterquesting.questing.QuestLineDatabase;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 @Mixin(GuiQuestLines.class)
 class MixinGuiQuestLines {
 
@@ -60,7 +65,7 @@ class MixinGuiQuestLines {
         QuestCvBackground = cvBackground;
 
         // Need this for first quest open padding
-        String timeProgress = GetQuestlineTimeProgress();
+        String timeProgress = emptyHorizons$GetQuestlineTimeProgress();
 
         final int BORDER_PADDING = 9;
         int timeProgressLength = (Minecraft.getMinecraft().fontRenderer.getStringWidth(timeProgress) + BORDER_PADDING)
@@ -91,7 +96,7 @@ class MixinGuiQuestLines {
             return;
         }
 
-        String timeProgress = GetQuestlineTimeProgress();
+        String timeProgress = emptyHorizons$GetQuestlineTimeProgress();
 
         QuestCvBackground.removePanel(timeProgressBox);
 
@@ -108,7 +113,7 @@ class MixinGuiQuestLines {
     }
 
     @Unique
-    private String GetQuestlineTimeProgress() {
+    private String emptyHorizons$GetQuestlineTimeProgress() {
 
         if (selectedLine == null) {
             return "";

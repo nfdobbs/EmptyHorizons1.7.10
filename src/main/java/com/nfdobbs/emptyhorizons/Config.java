@@ -1,7 +1,9 @@
 package com.nfdobbs.emptyhorizons;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -23,6 +25,18 @@ public class Config {
     private final static int MAX_DIM_VALUE = 100000;
     private final static int DEFAULT_DIM_VALUE = EmptyDimRegister.EMPTY_DIMENSION_ID;
     private final static String SAFE_DIMENSIONS_COMMENT = "Dimensions IDs here will be safe from building exposure.";
+
+    // Fuzzy Safe Dimensions Name
+    private final static String SAFE_DIM_NAMES_CATEGORY = "safe_dim_names";
+    private final static String DEFAULT_SAFE_DIM_NAME = "";
+    private final static String SAFE_DIM_NAMES_COMMENT = "Dimension Names and Partial Dimension Names will be safe from building exposure. EX: 'Space Station' should make all the Galacticraft Space Station dimensions safe.";
+
+    // Dimension Multipliers
+    private final static String DIMENSION_MULTIPLIERS_CATEGORY = "dimension_multipliers";
+    private final static Float MIN_MULTIPLIER = 0.25f;
+    private final static Float MAX_MULTIPLIER = 100f;
+    private final static Float DEFAULT_MULTIPLIER = 1f;
+    private final static String DIMENSION_MULTIPLIERS_COMMENT = "Dimensions IDs here will have their exposure buildup rate changed by the provided Float";
 
     // Challenge Spawn Separation
     public static int challengeSpawnSeparation = 1000;
@@ -64,7 +78,11 @@ public class Config {
 
     public static HashMap<String, Float> questLineMultipliers = new HashMap<>();
 
+    public static HashMap<Integer, Float> dimensionMultipliers = new HashMap<>();
+
     public static HashMap<String, Integer> safeDimensions = new HashMap<String, Integer>();
+
+    public static List<String> safeFuzzyDimNames = new ArrayList<>();
 
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
@@ -119,6 +137,7 @@ public class Config {
             MAX_ACHIEVEMENT_REWARD,
             BASE_ACHIEVEMENT_REWARD_COMMENT);
 
+        // Safe Dimensions
         configuration = configuration.setCategoryComment(SAFE_DIMENSIONS_CATEGORY, SAFE_DIMENSIONS_COMMENT);
 
         var safeDimensionsConfig = configuration.getCategory(SAFE_DIMENSIONS_CATEGORY);
@@ -135,6 +154,7 @@ public class Config {
             safeDimensions.put(entry.getKey(), safeDim);
         }
 
+        // Quest Line Multipliers
         configuration = configuration.setCategoryComment(QUEST_LINE_MULTIPLIER_CATEGORY, QUEST_LINE_MULTIPLIER_COMMENT);
 
         var questLineMultipliersConfig = configuration.getCategory(QUEST_LINE_MULTIPLIER_CATEGORY);
@@ -218,6 +238,62 @@ public class Config {
                 MAX_FLOAT_VALUE,
                 "");
             questLineMultipliers.put(entry.getKey(), questMultiplier);
+        }
+
+        // Dimension Multipliers
+        configuration = configuration.setCategoryComment(DIMENSION_MULTIPLIERS_CATEGORY, DIMENSION_MULTIPLIERS_COMMENT);
+
+        var dimensionMultiplierConfig = configuration.getCategory(DIMENSION_MULTIPLIERS_CATEGORY);
+
+        if (dimensionMultiplierConfig.isEmpty()) {
+            dimensionMultiplierConfig.put("1", new Property("1", "1.5", Property.Type.DOUBLE));
+        }
+
+        // Get Rate Multipliers
+        for (var entry : dimensionMultiplierConfig.entrySet()) {
+            Float dimMultiplier = configuration.getFloat(
+                entry.getKey(),
+                DIMENSION_MULTIPLIERS_CATEGORY,
+                DEFAULT_MULTIPLIER,
+                MIN_MULTIPLIER,
+                MAX_MULTIPLIER,
+                "");
+
+            Integer dimension = null;
+
+            try {
+                dimension = Integer.getInteger(entry.getKey());
+            } catch (NumberFormatException ex) {
+                EmptyHorizons.LOG.warn("Failed to convert '{}' to dimension ID.", entry.getKey());
+            }
+
+            if (dimension != null && !dimensionMultipliers.containsKey(dimension)) {
+                dimensionMultipliers.put(dimension, dimMultiplier);
+            }
+        }
+
+        // Fuzzy Dim Names
+        configuration = configuration.setCategoryComment(SAFE_DIM_NAMES_CATEGORY, SAFE_DIM_NAMES_COMMENT);
+
+        var safeFuzzyDimNamesConfig = configuration.getCategory(SAFE_DIM_NAMES_CATEGORY);
+
+        if (safeFuzzyDimNamesConfig.isEmpty()) {
+            safeFuzzyDimNamesConfig.put(
+                "Space Stations",
+                new Property("Galacticraft Space Stations", "Space Station", Property.Type.STRING));
+            safeFuzzyDimNamesConfig
+                .put("Storage Cells", new Property("AE2 Storage Cells", "Storage Cell", Property.Type.STRING));
+            safeFuzzyDimNamesConfig
+                .put("SpectreWorlds", new Property("RandomThings SpectreWorld", "SpectreWorld", Property.Type.STRING));
+            safeFuzzyDimNamesConfig
+                .put("SpiritWorlds", new Property("Witchery Spirit World", "Spirit World", Property.Type.STRING));
+        }
+
+        for (var entry : safeFuzzyDimNamesConfig.entrySet()) {
+            String fuzzyDimName = configuration
+                .getString(entry.getKey(), SAFE_DIM_NAMES_CATEGORY, DEFAULT_SAFE_DIM_NAME, "");
+
+            safeFuzzyDimNames.add(fuzzyDimName);
         }
 
         if (configuration.hasChanged()) {

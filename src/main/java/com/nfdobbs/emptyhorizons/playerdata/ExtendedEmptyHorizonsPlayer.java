@@ -9,10 +9,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
 import com.nfdobbs.emptyhorizons.CommonProxy;
 import com.nfdobbs.emptyhorizons.Config;
+import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimRegister;
 import com.nfdobbs.emptyhorizons.EmptyHorizons;
 import com.nfdobbs.emptyhorizons.network.SyncMessage;
 
@@ -239,5 +241,35 @@ public class ExtendedEmptyHorizonsPlayer implements IExtendedEntityProperties {
     @Override
     public void init(Entity entity, World world) {
 
+    }
+
+    public static boolean IsSafe(ExtendedEmptyHorizonsPlayer player, WorldProvider worldProvider) {
+        boolean playerNotDoingChallenge = false;
+        boolean dimensionIdMatch = false;
+
+        playerNotDoingChallenge = !player.isDoingChallenge();
+
+        if (playerNotDoingChallenge) {
+            return true;
+        }
+
+        int dimensionId = worldProvider.dimensionId;
+        String dimensionName = worldProvider.getDimensionName();
+
+        dimensionIdMatch = dimensionId == EmptyDimRegister.EMPTY_DIMENSION_ID
+            || Config.safeDimensions.containsValue(dimensionId);
+
+        if (dimensionIdMatch) {
+            return true;
+        }
+
+        for (String safeDimName : Config.safeFuzzyDimNames) {
+            if (dimensionName.toUpperCase()
+                .contains(safeDimName.toUpperCase())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

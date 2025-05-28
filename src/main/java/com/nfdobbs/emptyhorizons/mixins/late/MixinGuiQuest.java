@@ -1,4 +1,4 @@
-package com.nfdobbs.emptyhorizons.mixins.early;
+package com.nfdobbs.emptyhorizons.mixins.late;
 
 import static com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer.getQuestRewardTime;
 
@@ -30,7 +30,10 @@ import betterquesting.client.gui2.GuiQuest;
 import betterquesting.questing.QuestDatabase;
 import betterquesting.questing.QuestInstance;
 import betterquesting.questing.QuestLineDatabase;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 @Mixin(GuiQuest.class)
 public class MixinGuiQuest {
 

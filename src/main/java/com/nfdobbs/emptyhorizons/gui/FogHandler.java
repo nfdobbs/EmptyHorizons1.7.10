@@ -7,8 +7,6 @@ import net.minecraftforge.client.event.EntityViewRenderEvent;
 import org.lwjgl.opengl.GL11;
 
 import com.nfdobbs.emptyhorizons.ClientProxy;
-import com.nfdobbs.emptyhorizons.Config;
-import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimRegister;
 import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
 import com.nfdobbs.emptyhorizons.worlddata.FogRecord;
 
@@ -31,10 +29,7 @@ public class FogHandler {
 
         ExtendedEmptyHorizonsPlayer player = ExtendedEmptyHorizonsPlayer.get(this.mc.thePlayer);
 
-        int dimId = event.entity.worldObj.provider.dimensionId;
-
-        if (!player.isDoingChallenge() || dimId == EmptyDimRegister.EMPTY_DIMENSION_ID
-            || Config.safeDimensions.containsValue(dimId)) {
+        if (ExtendedEmptyHorizonsPlayer.IsSafe(player, event.entity.worldObj.provider)) {
             if (ClientProxy.fogProvider.showWelcomeMessage && Minecraft.getMinecraft().currentScreen == null) {
                 Minecraft.getMinecraft()
                     .displayGuiScreen(new WelcomeGUI());
@@ -65,22 +60,13 @@ public class FogHandler {
     public void onFogColor(EntityViewRenderEvent.FogDensity.FogColors event) {
 
         ExtendedEmptyHorizonsPlayer player = ExtendedEmptyHorizonsPlayer.get(this.mc.thePlayer);
-        int dimId = event.entity.worldObj.provider.dimensionId;
 
-        if (!player.isDoingChallenge() || dimId == EmptyDimRegister.EMPTY_DIMENSION_ID
-            || Config.safeDimensions.containsValue(dimId)
-            || IsTransparent(event)) {
+        if (ExtendedEmptyHorizonsPlayer.IsSafe(player, event.entity.worldObj.provider) || IsTransparent(event)) {
             return;
         }
 
         FogRecord fogRecord = ClientProxy.fogProvider
             .GetFogRecord(event.entity.worldObj, event.entity.worldObj.provider.dimensionId);
-
-        /*
-         * event.red = .21159399F;
-         * event.green = .9669117F;
-         * event.blue =
-         */
 
         if (fogRecord != null) {
             event.red = fogRecord.getFogColorR();
