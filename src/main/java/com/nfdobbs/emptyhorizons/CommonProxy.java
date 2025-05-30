@@ -6,16 +6,7 @@ import java.util.Map;
 import net.minecraft.nbt.NBTTagCompound;
 
 import com.nfdobbs.emptyhorizons.blocks.EmptyHorizonBlocks;
-import com.nfdobbs.emptyhorizons.network.FogDataMessage;
-import com.nfdobbs.emptyhorizons.network.FogDataMessageHandler;
-import com.nfdobbs.emptyhorizons.network.PlaystyleMessage;
-import com.nfdobbs.emptyhorizons.network.PlaystyleMessageHandler;
-import com.nfdobbs.emptyhorizons.network.ShowWelcomeGuiMessage;
-import com.nfdobbs.emptyhorizons.network.ShowWelcomeGuiMessageHandler;
-import com.nfdobbs.emptyhorizons.network.SyncMessage;
-import com.nfdobbs.emptyhorizons.network.SyncMessageHandler;
-import com.nfdobbs.emptyhorizons.network.TravelButtonMessage;
-import com.nfdobbs.emptyhorizons.network.TravelButtonMessageHandler;
+import com.nfdobbs.emptyhorizons.network.*;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -41,6 +32,8 @@ public class CommonProxy {
         networkWrapper.registerMessage(SyncMessageHandler.class, SyncMessage.class, 0, Side.CLIENT);
         networkWrapper.registerMessage(ShowWelcomeGuiMessageHandler.class, ShowWelcomeGuiMessage.class, 2, Side.CLIENT);
         networkWrapper.registerMessage(FogDataMessageHandler.class, FogDataMessage.class, 5, Side.CLIENT);
+        networkWrapper
+            .registerMessage(ServerConfigSyncMessageHandler.class, ServerConfigSyncMessage.class, 7, Side.CLIENT);
         networkWrapper.registerMessage(TravelButtonMessageHandler.class, TravelButtonMessage.class, 10, Side.SERVER);
         networkWrapper.registerMessage(PlaystyleMessageHandler.class, PlaystyleMessage.class, 11, Side.SERVER);
 

@@ -8,9 +8,12 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
 
+import com.nfdobbs.emptyhorizons.CommonProxy;
 import com.nfdobbs.emptyhorizons.Config;
 import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimRegister;
 import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimTeleporter;
+import com.nfdobbs.emptyhorizons.EmptyHorizons;
+import com.nfdobbs.emptyhorizons.network.ServerConfigSyncMessage;
 import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -47,19 +50,35 @@ public class FMLEventHandler {
 
     @SubscribeEvent
     public void onChangeDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+        int fromDim = event.fromDim;
+        int toDim = event.toDim;
 
-        boolean fromIsSafe = event.fromDim == EmptyDimRegister.EMPTY_DIMENSION_ID
-            || Config.safeDimensions.containsValue(event.fromDim);
+        ExtendedEmptyHorizonsPlayer modPlayer = ExtendedEmptyHorizonsPlayer.get(event.player);
 
-        boolean toIsSafe = event.toDim == EmptyDimRegister.EMPTY_DIMENSION_ID
-            || Config.safeDimensions.containsValue(event.toDim);
+        if (!modPlayer.isDoingChallenge()) {
+            return;
+        }
 
-        // If from is safe and to is not we need to divide
+        int newExpeditionTime = modPlayer.getExpeditionTime();
 
-        // If too is safe and from is not we need to multiply
+        if (Config.dimensionMultipliers.containsKey(fromDim)) {
+            float fromDimMultiplier = Config.dimensionMultipliers.get(fromDim);
 
-        // If both we need to do math
+            newExpeditionTime = (int) (newExpeditionTime * fromDimMultiplier);
+            modPlayer.setExpeditionTime(Math.min(newExpeditionTime, modPlayer.getMaxExpeditionTime()));
+        }
 
+        if (Config.dimensionMultipliers.containsKey(toDim)) {
+            float toDimMultiplier = Config.dimensionMultipliers.get(toDim);
+            newExpeditionTime = (int) (newExpeditionTime / toDimMultiplier);
+        }
+
+        // Safety Checks
+        if (newExpeditionTime < 1) {
+            newExpeditionTime = 1;
+        }
+
+        modPlayer.setExpeditionTime(Math.min(newExpeditionTime, modPlayer.getMaxExpeditionTime() - 1));
     }
 
     @SubscribeEvent
@@ -101,4 +120,15 @@ public class FMLEventHandler {
             }
         }
     }
+
+    @SubscribeEvent
+    public void OnPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        EmptyHorizons.LOG.info("Sending Dimension Multipliers Packet");
+
+        if (!event.player.worldObj.isRemote) {
+            CommonProxy.networkWrapper
+                .sendTo(new ServerConfigSyncMessage(Config.dimensionMultipliers), (EntityPlayerMP) event.player);
+        }
+    }
+
 }

@@ -251,8 +251,10 @@ public class Config {
 
         // Get Rate Multipliers
         for (var entry : dimensionMultiplierConfig.entrySet()) {
+            String dimIdString = entry.getKey();
+
             Float dimMultiplier = configuration.getFloat(
-                entry.getKey(),
+                dimIdString,
                 DIMENSION_MULTIPLIERS_CATEGORY,
                 DEFAULT_MULTIPLIER,
                 MIN_MULTIPLIER,
@@ -262,7 +264,7 @@ public class Config {
             Integer dimension = null;
 
             try {
-                dimension = Integer.getInteger(entry.getKey());
+                dimension = Integer.parseInt(dimIdString);
             } catch (NumberFormatException ex) {
                 EmptyHorizons.LOG.warn("Failed to convert '{}' to dimension ID.", entry.getKey());
             }

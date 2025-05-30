@@ -5,6 +5,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
+import com.nfdobbs.emptyhorizons.ClientProxy;
 import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
 import com.nfdobbs.emptyhorizons.util.TimeString;
 
@@ -46,7 +47,6 @@ public class EmptyHorizonsOverlay extends Gui {
         }
 
         String expeditionTimeString = TimeString.CreateTimeString(expeditionTime);
-        String maxExpeditionTimeString = "Max Expedition Time: " + TimeString.CreateTimeString(maxExpeditionTime);
 
         EnumChatFormatting color = EnumChatFormatting.WHITE;
 
@@ -58,15 +58,20 @@ public class EmptyHorizonsOverlay extends Gui {
 
         expeditionTimeString = color + expeditionTimeString;
 
-        int currentDim = this.mc.thePlayer.dimension;
+        // Check for dimension multiplier
+        int dimId = this.mc.thePlayer.dimension;
+        float dimMultiplier = 1.0f;
 
-        drawString(
-            mc.fontRenderer,
-            "Lethal Exposure: " + expeditionTimeString + " (" + currentDim + ")",
-            2,
-            2,
-            0xFFFFFF);
+        if (ClientProxy.serverDimensionMultipliers.containsKey(dimId)) {
+            dimMultiplier = ClientProxy.serverDimensionMultipliers.get(dimId);
+        }
 
-        // drawString(mc.fontRenderer, maxExpeditionTimeString, 2, 15, 0xFF5555);
+        String displayString = "Lethal Exposure: " + expeditionTimeString;
+
+        if (dimMultiplier != 1.0f) {
+            displayString += " (" + dimMultiplier + "x)";
+        }
+
+        drawString(mc.fontRenderer, displayString, 2, 2, 0xFFFFFF);
     }
 }

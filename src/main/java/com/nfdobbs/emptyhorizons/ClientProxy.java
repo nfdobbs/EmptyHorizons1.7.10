@@ -1,5 +1,7 @@
 package com.nfdobbs.emptyhorizons;
 
+import java.util.HashMap;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
@@ -16,6 +18,7 @@ public class ClientProxy extends CommonProxy {
 
     // Provides fog density and color
     public static FogProvider fogProvider = new FogProvider();
+    public static HashMap<Integer, Float> serverDimensionMultipliers = new HashMap<>();
 
     @Override
     public void init(FMLInitializationEvent event) {
