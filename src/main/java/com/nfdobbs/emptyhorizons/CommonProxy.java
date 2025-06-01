@@ -41,6 +41,9 @@ public class CommonProxy {
 
         EmptyHorizons.LOG.info(Config.greeting);
         EmptyHorizons.LOG.info("I am Empty Horizons at version " + Tags.VERSION);
+
+        // Register DamageSource Mesage
+
     }
 
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)

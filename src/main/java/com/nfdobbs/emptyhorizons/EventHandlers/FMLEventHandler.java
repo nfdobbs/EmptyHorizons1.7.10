@@ -22,6 +22,8 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 
 public class FMLEventHandler {
 
+    DamageSource Exposure = new DamageSource(EmptyHorizons.MODID + "_exposure");
+
     private int tickCounter = 0;
 
     @SubscribeEvent
@@ -112,7 +114,7 @@ public class FMLEventHandler {
                         }
 
                         if (currentExpTime < 1) {
-                            player.attackEntityFrom(DamageSource.outOfWorld, Float.MAX_VALUE);
+                            player.attackEntityFrom(Exposure, Float.MAX_VALUE);
                             return;
                         }
                     }
