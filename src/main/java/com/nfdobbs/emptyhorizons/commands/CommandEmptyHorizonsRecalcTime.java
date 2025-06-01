@@ -66,7 +66,7 @@ public class CommandEmptyHorizonsRecalcTime implements ICommand {
                 return;
             }
 
-            int newMaxTime = RecalculateTime(playerFromArg);
+            int newMaxTime = RecalculateTime(playerFromArg, questDB, questLineDB);
 
             ExtendedEmptyHorizonsPlayer moddedPlayer = (ExtendedEmptyHorizonsPlayer) playerFromArg
                 .getExtendedProperties(ExtendedEmptyHorizonsPlayer.EXT_PROP_NAME);
@@ -128,8 +128,9 @@ public class CommandEmptyHorizonsRecalcTime implements ICommand {
         return 0;
     }
 
-    public int RecalculateTime(EntityPlayerMP player) {
-        List<Map.Entry<UUID, QuestInstance>> completedQuests = CompletedQuests(player);
+    public static int RecalculateTime(EntityPlayerMP player, QuestDatabase questDbInstance,
+        QuestLineDatabase questLineDbInstance) {
+        List<Map.Entry<UUID, QuestInstance>> completedQuests = CompletedQuests(player, questDbInstance);
         int achievementCount = CompletedAchievements(player);
 
         int rewardTime = ExtendedEmptyHorizonsPlayer.startingExposureTime;
@@ -139,7 +140,7 @@ public class CommandEmptyHorizonsRecalcTime implements ICommand {
             UUID questUUID = questMapping.getKey();
             QuestInstance questInstance = questMapping.getValue();
 
-            List<String> questLineNames = FindQuestLineNames(questUUID);
+            List<String> questLineNames = FindQuestLineNames(questUUID, questLineDbInstance);
 
             rewardTime += getQuestRewardTime(questInstance, questLineNames);
         }
@@ -149,9 +150,9 @@ public class CommandEmptyHorizonsRecalcTime implements ICommand {
         return rewardTime;
     }
 
-    // Duplicating Function Mainly Because I dont know how to get it in both places rn
-    public List<String> FindQuestLineNames(UUID questUUID) {
-        List<Map.Entry<UUID, IQuestLine>> questLines = questLineDB.getOrderedEntries();
+    // Duplicating Function Mainly Because I don't know how to get it in both places rn
+    public static List<String> FindQuestLineNames(UUID questUUID, QuestLineDatabase questLineDbInstance) {
+        List<Map.Entry<UUID, IQuestLine>> questLines = questLineDbInstance.getOrderedEntries();
 
         List<String> questLineNames = new ArrayList<>();
 
@@ -167,11 +168,12 @@ public class CommandEmptyHorizonsRecalcTime implements ICommand {
         return questLineNames;
     }
 
-    public List<Map.Entry<UUID, QuestInstance>> CompletedQuests(EntityPlayerMP player) {
+    public static List<Map.Entry<UUID, QuestInstance>> CompletedQuests(EntityPlayerMP player,
+        QuestDatabase questDbInstance) {
         List<Map.Entry<UUID, QuestInstance>> completedQuests = new ArrayList<Map.Entry<UUID, QuestInstance>>();
 
-        for (UUID questID : questDB.keySet()) {
-            QuestInstance currentQuest = (QuestInstance) questDB.get(questID);
+        for (UUID questID : questDbInstance.keySet()) {
+            QuestInstance currentQuest = (QuestInstance) questDbInstance.get(questID);
 
             if (currentQuest != null && currentQuest.getProperty(NativeProps.REPEAT_TIME) < 0) {
                 UUID uuid = QuestingAPI.getQuestingUUID(player);
@@ -185,7 +187,7 @@ public class CommandEmptyHorizonsRecalcTime implements ICommand {
         return completedQuests;
     }
 
-    public int CompletedAchievements(EntityPlayerMP player) {
+    public static int CompletedAchievements(EntityPlayerMP player) {
         List<Achievement> fullAchievementList = AchievementList.achievementList;
 
         List<Achievement> completedAchievement = new ArrayList<Achievement>();

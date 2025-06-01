@@ -1,2 +1,4 @@
 tile.ExcursionBlock.name=Excursion Block
 tile.EvacuationBlock.name=Evacuation Block
+death.attack.emptyhorizons_exposure=%1$s died from exposure
+death.attack.emptyhorizons_exposure.player=%1$s died from exposure while trying to escape %2$s

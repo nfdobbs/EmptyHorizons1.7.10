@@ -5,22 +5,31 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumChatFormatting;
 
 import com.nfdobbs.emptyhorizons.CommonProxy;
 import com.nfdobbs.emptyhorizons.Config;
 import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimRegister;
 import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimTeleporter;
 import com.nfdobbs.emptyhorizons.EmptyHorizons;
+import com.nfdobbs.emptyhorizons.commands.CommandEmptyHorizonsRecalcTime;
 import com.nfdobbs.emptyhorizons.network.ServerConfigSyncMessage;
 import com.nfdobbs.emptyhorizons.playerdata.ExtendedEmptyHorizonsPlayer;
+import com.nfdobbs.emptyhorizons.util.TimeString;
 
+import betterquesting.questing.QuestDatabase;
+import betterquesting.questing.QuestLineDatabase;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 
 public class FMLEventHandler {
+
+    private final QuestDatabase questDB = QuestDatabase.INSTANCE;
+    private final QuestLineDatabase questLineDB = QuestLineDatabase.INSTANCE;
 
     DamageSource Exposure = new DamageSource(EmptyHorizons.MODID + "_exposure");
 
@@ -130,6 +139,30 @@ public class FMLEventHandler {
         if (!event.player.worldObj.isRemote) {
             CommonProxy.networkWrapper
                 .sendTo(new ServerConfigSyncMessage(Config.dimensionMultipliers), (EntityPlayerMP) event.player);
+
+            ExtendedEmptyHorizonsPlayer modPlayer = ExtendedEmptyHorizonsPlayer.get(event.player);
+
+            if (Config.recalculateTimeOnConnect && modPlayer.isDoingChallenge()) {
+                int originalMaxTime = modPlayer.getMaxExpeditionTime();
+
+                int newMaxTime = CommandEmptyHorizonsRecalcTime
+                    .RecalculateTime((EntityPlayerMP) event.player, questDB, questLineDB);
+
+                if (modPlayer.getExpeditionTime() > newMaxTime) {
+                    modPlayer.setExpeditionTime(newMaxTime - 5);
+                }
+
+                modPlayer.setMaxExpeditionTime(newMaxTime);
+
+                if (newMaxTime != originalMaxTime) {
+                    event.player.addChatMessage(
+                        new ChatComponentText(
+                            EnumChatFormatting.YELLOW + "[Config Change]"
+                                + EnumChatFormatting.WHITE
+                                + " Your max time has been updated to: "
+                                + TimeString.CreateTimeString(newMaxTime)));
+                }
+            }
         }
     }
 

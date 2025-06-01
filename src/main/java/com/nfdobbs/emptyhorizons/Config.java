@@ -12,6 +12,10 @@ import com.nfdobbs.emptyhorizons.EmptyDimension.EmptyDimRegister;
 
 public class Config {
 
+    // Recalculate Time on Connection
+    public static boolean recalculateTimeOnConnect = false;
+    private final static String RECALC_VALUE_COMMENT = "[Experimental] Recalculates a challenge run players time upon joining the game, may have a negative performance impact.";
+
     // Quest Line Multipliers
     private final static String QUEST_LINE_MULTIPLIER_CATEGORY = "quest_line_multipliers";
     private final static Float MIN_FLOAT_VALUE = 0.25f;
@@ -57,7 +61,7 @@ public class Config {
     private final static String EXCURSION_ATTEMPTS_COMMENT = "Number of attempts to allow per location.";
 
     // Base Main Quest Rewards
-    public static int baseMainQuestReward = 9;
+    public static int baseMainQuestReward = 8;
     private final static int MIN_BASE_MAIN_QUEST_REWARD = 0;
     private final static int MAX_BASE_MAIN_QUEST_REWARD = 600;
     private final static String BASE_MAIN_QUEST_REWARD_COMMENT = "Base time to give before multipliers for main quests.";
@@ -69,12 +73,12 @@ public class Config {
     private final static String BASE_OPTIONAL_QUEST_REWARD_COMMENT = "Base time to give before multipliers for optional quests.";
 
     // Achievement Rewards
-    public static int achievementReward = 5;
+    public static int achievementReward = 10;
     private final static int MIN_ACHIEVEMENT_REWARD = 0;
     private final static int MAX_ACHIEVEMENT_REWARD = 600;
     private final static String BASE_ACHIEVEMENT_REWARD_COMMENT = "Base time to give for completing an achievement.";
 
-    public static String greeting = "Welcome to suffering";
+    public static String greeting = "And so it begins";
 
     public static HashMap<String, Float> questLineMultipliers = new HashMap<>();
 
@@ -136,6 +140,12 @@ public class Config {
             MIN_ACHIEVEMENT_REWARD,
             MAX_ACHIEVEMENT_REWARD,
             BASE_ACHIEVEMENT_REWARD_COMMENT);
+
+        recalculateTimeOnConnect = configuration.getBoolean(
+            "recalculateTimeOnConnect",
+            Configuration.CATEGORY_GENERAL,
+            recalculateTimeOnConnect,
+            RECALC_VALUE_COMMENT);
 
         // Safe Dimensions
         configuration = configuration.setCategoryComment(SAFE_DIMENSIONS_CATEGORY, SAFE_DIMENSIONS_COMMENT);
