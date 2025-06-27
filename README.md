@@ -17,4 +17,4 @@ Most dimensions have been over taken by a poisonous fog. Spending too much time 
 - `/eh_whereami`: Lists the current dimensions ID and Name. 
 
 ### Credits
-Originally forked from [ExampleMod1.7.10](https://github.com/GTNewHorizons/ExampleMod1.7.10/tree/master) by [SinTh0r4s](https://github.com/SinTh0r4s), [TheElan](https://github.com/TheElan) and [basdxz](https://github.com/basdxz)
+Originally forked from [ExampleMod1.7.10](https://github.com/GTNewHorizons/ExampleMod1.7.10/tree/master) by [SinTh0r4s](https://github.com/SinTh0r4s), [TheElan](https://github.com/TheElan) and [basdxz](https://github.com/basdxz).
