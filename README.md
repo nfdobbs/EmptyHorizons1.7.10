@@ -9,6 +9,7 @@ Most dimensions have been over taken by a poisonous fog. Spending too much time 
 - An expedition block for traveling into the overworld.
 - Randomly generated fog color and density for other lethal dimensions.
 - Practically all options are changable in the config.
+- Integration with the BetterQuesting mod to show time rewards and chapter multipliers in the quest book.
 
 ### Commands
 - `/eh_chapterMultipliers`: Lists all chapter multipliers. (This is less useful now that the BetterQuesting integration has been added)
