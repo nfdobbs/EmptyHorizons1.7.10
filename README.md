@@ -1,4 +1,4 @@
-# Empty Horizons a GTNH Challenge Mod
+# Empty Horizons: A GTNH Challenge Mod
 
 Most dimensions have been over taken by a poisonous fog. Spending too much time in it results in death from exposure. Challenge players start in a new dimension, the Empty Dimension, and must make excursions into the overworld to gather resources. Completing quests and achievements increases the amount of time players can spend in the fog.
 
